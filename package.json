@@ -1,0 +1,31 @@
+{
+  "name": "QMSAccessiblity_2014",
+  "version": "0.0.0",
+  "description": "Application to manage the quality management documents in an enterprise",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prk68/QMSAccessiblity_2014.git"
+  },
+  "keywords": [
+    "quality",
+    "management",
+    "mean",
+    "stack",
+    "sdlc"
+  ],
+  "author": "prithvi raj krishna",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prk68/QMSAccessiblity_2014/issues"
+  },
+  "homepage": "https://github.com/prk68/QMSAccessiblity_2014",
+  "dependencies": {
+	"express": "~3.4.8",
+    "mongoose": "~3.6.13"
+  }  
+}
