@@ -1,0 +1,17 @@
+
+<div>
+	<div class="row">
+		<div class="col-xs-12 col-xs-offset-5">
+			<button type="submit" class="btn btn-primary" ng-click="printReader()">Print &nbsp;<span class="glyphicon glyphicon-print"></span> </button>
+		</div>
+	</div>
+	<br>
+	<div id="reader" style="border: 1px solid #C0C0C0;padding:10px;border-width:thick;border-style: groove;">
+		
+			<h2 class="text-center"> {{procedure.pid}}&nbsp;:&nbsp;{{procedure.pname}}  <small> &#40; Author : {{procedure.owner_name}}  &#41; </small></h2> 
+			
+
+			<div class="lead" ng-bind-html="procedure.content"></div>
+			
+	</div>
+</div>

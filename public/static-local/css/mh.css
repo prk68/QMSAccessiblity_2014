@@ -1,0 +1,56 @@
+/* General Definitions */
+/*body,p{font:11px Arial,sans-serif;}*/
+ul,ol{/*margin:0 0 1em*/;padding-left:20px;}
+ul{list-style-type:square;}
+
+/* Portal */
+#masthead{height:32px;background-color:#036;z-index:1000;}
+#mhnav,#mhform{max-height:32px;float:right;display:block;}
+#mhbox {background-color:#fff;border:1px solid #ddd;float:left;height:22px;margin:4px 15px 4px 5px;padding:0 0 0 2px;width:140px;}
+#mhq{border:0 none;color:#444;float:left;font:14px Arial,sans-serif;margin:2px 0;width:100px;padding:1px;}
+#mhmg{background:url(/images/mh5.png) no-repeat scroll 10px 0 transparent;border:none;cursor:pointer;float:right;margin:3px 0 0 -2px;padding:0;text-indent:-9999px;width:35px;height:16px;}
+#mhso{width:90px;display:none;float:right;background-color:#fff;font:11px Arial,sans-serif;color:#369;position:relative;right:-1px;}
+#mhso li{width:78px;margin:0;padding:4px 4px 4px 6px;border-bottom:1px solid #ccc;border-left:1px solid #ccc;border-right:1px solid #ccc;}
+/*#mhso li:hover{background-color:#4f89bf;color:#fff;border-color:#4f89bf;}*/
+/*.mhnav ul{float:left;margin:0;padding:0;list-style:none;font:14px Arial,sans-serif;position:relative;z-index:80;}*/
+
+.mhnav ul{float:left;margin:0;padding:0;list-style:none;font:14px Arial,sans-serif;z-index:9999;}
+.mhnav li{display:inline;float:left;border-right:1px solid #369;padding:2px 5px;margin:6px 0;cursor:pointer;} 
+.mhnav li#mh-menu0{border-right:20px solid #036;}
+.mhnav a{background-color:transparent;color:#fff;text-decoration:none;cursor:pointer;}
+.mhnav li:hover,.mhnav li.hover{background-color:#ddd;margin:0;padding:8px 5px;border-right-color:#ddd;}
+.mhnav li:hover a,.mhnav li.hover a{color:#000;}
+.mhnav li ul{display:none;background-color:#ddd;box-shadow:0 2px 2px rgba(0, 0, 0, 0.4);position:absolute;top:32px;z-index:1111;padding:0;margin-left:-5px;}
+.mhnav li li{display:block;float:none;border-right:none;padding:0!important;margin:0!important;white-space:nowrap;}
+.mhnav li ul.ie li{padding:0 1px!important;} .mhnav li ul.ie li.last:hover{padding:0 1px 1px!important;} 
+.mhnav li li a{display:block;color:#333;padding:5px;min-width:225px;}
+.mhnav li li a:hover{background-color:#fff;color:#036;} 
+
+/*
+.mhnav ul{float:left;margin:0;padding:0;list-style:none;font:14px Arial,sans-serif;position:relative;z-index:999;}
+.mhnav li{display:inline;float:left;border-right:1px solid #369;padding:2px 5px;margin:6px 0;cursor:pointer;} 
+.mhnav li#mh-menu0{border-right:20px solid #036;}
+.mhnav a{background-color:transparent;color:#fff;text-decoration:none;cursor:pointer;}
+.mhnav li:hover,.mhnav li.hover{background-color:#ddd;margin:0;padding:8px 5px;border-right-color:#ddd;}
+.mhnav li:hover a,.mhnav li.hover a{color:#000;}
+.mhnav li ul{display:none;background-color:#ddd;box-shadow:0 2px 2px rgba(0, 0, 0, 0.4);position:absolute;top:32px;z-index:20;padding:0;margin-left:-5px;}
+.mhnav li li{display:block;float:none;border-right:none;padding:0!important;margin:0!important;white-space:nowrap;}
+.mhnav li ul.ie li{padding:0 1px!important;} .mhnav li ul.ie li.last:hover{padding:0 1px 1px!important;} 
+.mhnav li li a{display:block;color:#333;padding:5px;min-width:225px;}
+.mhnav li li a:hover{background-color:#fff;color:#036;} 
+*/
+/* Portal IE7 Fixes */
+#mhform{#float:left;} .mhnav a{#display:block;}
+.mhnav li li:hover{#background-color:#fff;#margin:1px!important;} .mhnav li li:hover a{#padding:4px;}
+
+/* Portal IE7 Fixes */
+/*#mhform{#float:left;}
+.mhnav a{#display:block;color:#fff;}
+.mhnav li li:hover{#background-color:#fff;#margin:1px!important;}
+.mhnav li li:hover a{#padding:4px;}
+*/
+/* Page */
+#page{padding:120px 20px 0;}
+#page h1{font:bold italic 20px Georgia;margin:10px 0;}
+#page h1 span{font-size:60%;color:#888;margin-left:30px;}
+#page p{margin:10px 0 0;}

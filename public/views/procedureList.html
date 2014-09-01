@@ -1,0 +1,22 @@
+<div>
+
+<h3>Procedure Library</h3>
+<br>
+<table  class="table table-striped">
+	<thead>
+		<tr>
+			<th> Procedure ID </th>
+			<th> Procedure Name </th>
+			<th> Author </th>
+			<th> <a href="#/" ng-click="changeOder()">Last Modified Date</a></th>
+		</tr>
+	</thead>
+
+	<tr ng-repeat='procedure in procedures | orderBy:orderByField:order'>
+		<td> {{procedure.pid }}</td>
+		<td> <a href="/reader/{{procedure.pid}}"> {{procedure.pname }} </a></td>
+		<td> {{procedure.owner_name}}</td>
+		<td> {{procedure.date_of_modification }}</td>
+	</tr>
+</table>
+</div>

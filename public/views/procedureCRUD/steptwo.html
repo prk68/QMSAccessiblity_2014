@@ -1,0 +1,117 @@
+<div>
+	<h2> Step 2/3 : Mappings </h2>
+	<br>
+	<form role="form">
+		
+		
+		<label for="roleGroup"><strong>Roles  to which it applies</strong></label>
+		
+		<div class="form-group">
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox1" ng-model="procedure.role.pfl"> Portfolio
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox2" ng-model="procedure.role.eng"> Engineering
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox3" ng-model="procedure.role.cmz"> Commercialization
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox4" ng-model="procedure.role.ops"> Operations
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox5" ng-model="procedure.role.sup"> Support
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox6" ng-model="procedure.role.qlty"> Quality Management
+			</label>			
+		</div>
+		
+		
+		<label for="rupGroup"><strong>RUP Project phases to which it applies</strong></label>
+		
+		<div class="form-group">			
+			<label class="checkbox-inline">
+				<input type="checkbox" id="rupCheckbox1" ng-model="procedure.phase.incp"> Inception
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="rupCheckbox2" ng-model="procedure.phase.elb"> Elaboration
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="rupCheckbox3" ng-model="procedure.phase.constr"> Construction
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="rupCheckbox4" ng-model="procedure.phase.beta"> Beta
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="rupCheckbox5" ng-model="procedure.phase.cmz"> Commercialization
+			</label>			
+		</div>
+		
+		
+		<br>
+
+		<label for="roleGroup"><strong>Tech centers to which the procedure is local to </strong></label>
+
+		<br>
+		
+		
+
+		<div class="form-group">
+
+			<div class="btn-group" data-toggle="buttons">
+				<label class="btn btn-primary"> <input type="radio" ng-model="procedure.global" ng-click="setGlobal()"> Global Procedure </label>
+				<label class="btn btn-primary"> <input type="radio" ng-click="setLocal()"> Local Procedure </label>				
+			</div>
+
+			<br><br><br>
+
+			<label class="checkbox-inline">
+				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.abtc"> ABTC
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.atc"> AaTC
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.brgc"> BRGC
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.htc"> HTC
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox"  ng-disabled="procedure.global" ng-model="procedure.center.mptc"> MPTC
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.ntc"> SNTC
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.ptc"> PTC
+			</label>			
+		</div>
+
+
+
+		<label for="questions"><strong>Enter 3 questions that this procedure seeks to answer</strong></label>
+		
+		<br>
+		<div class="form-group">
+			<input type="text" class="form-control" size="100" id="question1"
+			ng-model="procedure.questions[0]">
+		</div>
+		
+		<div class="form-group">			
+			<input type="text" class="form-control" size="100" id="question2"
+			ng-model="procedure.questions[1]">
+		</div>
+		
+		<div class="form-group">
+			<input type="text" class="form-control" size="100" id="question3"
+			ng-model="procedure.questions[2]">
+		</div>
+		
+	<ul class="pager">
+		<li class="previous"><a href="/admin/procedurecrud/step1/{{url_extension}}">&larr; Initialization </a></li>
+		<li class="next"><a href="/admin/procedurecrud/step3/{{url_extension}}"> Content &rarr;</a></li>
+	</ul>
+	
+</div>

@@ -26,6 +26,9 @@
   "homepage": "https://github.com/prk68/QMSAccessiblity_2014",
   "dependencies": {
 	"express": "~3.4.8",
-    "mongoose": "~3.6.13"
+    "mongoose": "~3.6.13",
+	"express-jwt":"*",
+	"jsonwebtoken":"*",
+	"ldapjs":"*"	
   }  
 }

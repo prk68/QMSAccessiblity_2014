@@ -1,0 +1,12 @@
+
+
+
+
+<div>
+	<h3>Search Results &#40; Number of results : {{result_count}}  &#41; </h3>
+	<div class="row top-buffer">
+		<ul>
+			<li ng-repeat='result in results'> <h4> <a href="/reader/{{result.proc.pid}}"> <u> {{result.proc.pid }} : {{result.proc.pname }} </li>
+		</ul>
+	</div>
+</div>

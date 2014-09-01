@@ -1,0 +1,21 @@
+ 
+
+ var module = angular.module('editProcedureSelectorModule', []);
+
+ module.controller('editProcedureSelectorController', function($scope){
+
+ 	$scope.orderByField = 'Last Modifed Date';
+
+	$http.get('/procedures/all').success(function(result, status, headers, config) {
+			$scope.procedures = result;
+			console.log(result)
+	});
+
+	$scope.changeOrder = function() {
+							console.log("jcole")
+							order = !order
+						}
+
+
+
+})

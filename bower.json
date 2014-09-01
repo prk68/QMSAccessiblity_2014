@@ -4,6 +4,9 @@
 	"dependencies": {
 		"bootstrap": "latest",
 		"angular": "latest",
-		"angular-route": "latest"	
+		"angular-route": "latest",
+		"angular-resource": "latest",
+		"ckeditor": "4"
+		"jquery": "4"
 	}
 }
