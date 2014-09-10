@@ -13,7 +13,7 @@ var ldap_client = ldap.createClient({
 });
 var baseDn = 'O=SLB,C=AN'
 var ldap_opts= {filter:"", scope:'sub'}
-
+var adminData = require('./admins.json'); 
 
 var validUsers = [{uname:'qmsadmin1', pwd:'qmsadmin1'},{uname:'qmsadmin2', pwd:'qmsadmin2'},{uname:'qmsadmin3', pwd:'qmsadmin3'},{uname:'qmsadmin4', pwd:'qmsadmin4'},{uname:'qmsadmin5', pwd:'qmsadmin5'},]
 
@@ -33,7 +33,7 @@ function getFileName(filename) {
 function sendToken(alias, res)
 {
 	// We are sending the profile inside the token
-  	var token = jwt.sign({uname:alias}, secret, { expiresInMinutes: 10 });
+  	var token = jwt.sign({uname:alias}, secret, { expiresInMinutes: 60 });
 
   	res.send({ token: token })
 }
@@ -85,31 +85,40 @@ module.exports = function(app) {
 	
 	
 	app.post('/procedure/add', function(req, res) {
-		dbController.addToDB(req.body);
-		res.send({status:"ok"})
+		dbController.addToDB(req, res);
 	});
 	
 	
 	app.post('/procedure/update', function(req, res) {
-		dbController.updateInDB(req.body.procedure);
-		res.send({status:"ok"})
+		dbController.updateInDB(req, res);		
 	});
 
 
-	app.get('/procedures/all', function(req, res) {
+	app.get('/procedures', function(req, res) {
 		dbController.getAllProcedures(res);
 	});	
 
 
-	app.get('/procedure/:id', function(req, res) {
+	app.get('/admin/list', function(req, res) {
+		res.json(adminData);
+	});	
+
+
+	app.get('/procedures/:id', function(req, res) {
 		console.log("hoeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
 		dbController.getProcedure(req.params.id, res);
 	});
 
 	app.post('/deleteProcedure', function(req, res) {
-		console.log("jigaaaaaaaaaa")
-		console.log(req.body)
-		dbController.deleteProcedure(req.body.id, res);
+		dbController.deleteProcedure(req, res);
+	});
+
+	app.post('/admin/revert', function(req, res) {
+		dbController.revertProcedure(req, res);
+	});
+
+	app.post('/admin/restore', function(req, res) {
+		dbController.restoreProcedure(req, res);
 	});
 
 	app.post('/login', function(req, res) {
@@ -119,9 +128,8 @@ module.exports = function(app) {
 	{
 		if ((req.body.username === validUsers[i].uname && req.body.password === validUsers[i].pwd)) {
 			valid = true;
-  		  	sendToken(req.body.username, res)
-			break;
-  		}
+  		  	return sendToken(req.body.username, res)
+		}
 	}
 
 	//check for zero length user name and pwd
@@ -131,9 +139,26 @@ module.exports = function(app) {
 		
 	ldap_opts.filter = (('alias='+ req.body.username))
 
+	var aliases = adminData.admins
+	var validAdmin = false;
+
+	for(i=0; i<aliases.length; ++i)
+	{
+		if(aliases[i].alias.toUpperCase() == req.body.username.toUpperCase())
+		{
+			validAdmin = true;
+			break;
+		}
+	}	
+
+	if(validAdmin == false)
+		res.send(401, 'could not authenticate');
+
 	//search
 	ldap_client.search(baseDn, ldap_opts, function(err, result){
-		
+		console.log(baseDn)
+		console.log(result)	
+		console.log(err)
 		result.on('searchEntry', function(entry) {
 			var dn = entry.object.dn
 			// Try to bind and if sucess return authentication token
@@ -151,6 +176,8 @@ module.exports = function(app) {
 			
 	})	
 })
+
+
 
 
 	// frontend routes =========================================================

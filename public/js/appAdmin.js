@@ -1,9 +1,10 @@
-var mod = angular.module('qmsAdminApp', ['ngRoute', 'appAdminRoutes', 'ngCkeditor', 'defaultProcedureServiceModule', 'procedureCRUDCtrlModule', 'editProcedureSelectorModule', 'dBProcedureServiceModule', 'deleteProcedureSelectorModule', 'ngSanitize']);
+var mod = angular.module('qmsAdminApp', ['ngRoute', 'appAdminRoutes', 'ngCkeditor', 'defaultProcedureServiceModule', 'procedureCRUDCtrlModule', 'editProcedureSelectorModule','procedureRevListCtrl','revertProcedureSelectorModule', 'dBProcedureServiceModule', 'trashCanCtrlModule','adminProvider', 'deleteProcedureSelectorModule', 'ngSanitize']);
 
 
 mod.factory('authService', function($http, $window) {
     return {
         logIn: function(username, password) {
+            console.log("entered login")
             return $http.post('/login', {username: username, password: password});
         },
  
@@ -20,9 +21,9 @@ mod.controller('loginController', function($scope, $location, authService, $wind
 
 
 	$scope.profile = {alias:'alias', password:''};
-
+  $scope.showErr = false;
 	console.log('costaaaaaaaaaaaa')
-
+  $scope.entered   = false
 	$scope.login = function(){
 
 
@@ -31,6 +32,7 @@ mod.controller('loginController', function($scope, $location, authService, $wind
 			$window.sessionStorage.token = data.token
       $window.sessionStorage.validated = "true"
       $window.sessionStorage.username = $scope.profile.alias
+      $scope.entered  = true;
 			$location.path('/admin/home')
 			console.log('sucesssssssssss')
       console.log($window.sessionStorage.token)
@@ -40,7 +42,8 @@ mod.controller('loginController', function($scope, $location, authService, $wind
             $window.sessionStorage.validated = "false"
             $window.sessionStorage.username = ""
 
-            alert("Invalid credential or access rights")
+            $scope.showErr = true;
+            console.log($scope.showErr)
         });	
 			
 	}
@@ -72,7 +75,7 @@ mod.config(function ($httpProvider) {
 mod.run(['$rootScope', '$location',  'authService', '$window', function($rootScope, $location, authService, $window) {
     $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
         console.log($window.sessionStorage)
-        console.log(nextRoute.$$route.access)
+        console.log(nextRoute)
         if (nextRoute.originalPath == "/admin/logout") {
             console.log('outtttttttttttttttttttttttttttttttttttttttttttttttttttttttttt')
             authService.logOut()

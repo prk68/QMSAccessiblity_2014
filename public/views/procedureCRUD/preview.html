@@ -5,15 +5,15 @@
 
 	<div id="reader" style="border: 1px solid #C0C0C0;padding:10px;border-width:thick;border-style: groove;">
 		
-			<h2 class="text-center"> {{procedure.pid}}&nbsp;:&nbsp;{{procedure.pname}}  <small> &#40; Author : {{procedure.owner_name}}  &#41; </small></h2> 
+			<h2 class="text-center"> {{procedure.pid}}&nbsp;:&nbsp;{{procedure.versions[procedure.baseline].pname}}  <small> &#40; Author : {{procedure.versions[procedure.baseline].owner}}  &#41; </small></h2> 
 			
 
-			<div class="lead" ng-bind-html="procedure.content"></div>
+			<div class="lead" ng-bind-html="procedure.versions[procedure.baseline].content"></div>
 			
 	</div>
 
 	<div class="btn-group">
-  		<a href="/procedurecrud/step3/{{url_extension}}" type="button" class="btn btn-default">Not Satisfied ?</a>
+  		<a href="/admin/procedurecrud/step3/{{url_extension}}" type="button" class="btn btn-default">Not Satisfied ?</a>
   		<a href="#" type="submit" class="btn btn-primary" ng-click="uploadProcedure()">Submit</a>
 	</div>
 

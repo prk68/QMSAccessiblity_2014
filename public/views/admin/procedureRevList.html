@@ -1,0 +1,47 @@
+<div>
+
+<h2>Versions contained in the procedure for {{procedure.pid}}</h3>
+<br>
+
+<h3> Current active version {{procedure.versions[procedure.baseline].nversion}} </h3>
+
+<br>
+
+<div class="row">
+<div class="col-xs-3">
+	<table  class="table">
+		<thead>
+			<tr>
+				<th> Revision </th>
+			</tr>
+		</thead>
+
+		<tr ng-repeat='rev in procedure.versions'>
+			<td> {{rev.nversion }}</td>
+			<td> <button type="submit" class="btn btn-primary" ng-click="consultProcedure(rev.nversion)"> Consult  </a></td>
+			<td> <button type="submit" class="btn btn-primary" ng-click="revertProcedure(rev.nversion)"> Revert to this </button> </td>
+		</tr>
+	</table>
+</div>
+
+<div class="col-xs-9">
+	<div ng-show="consultActivated" id="reader" style="border: 1px solid #C0C0C0;padding:10px;border-width:thick;border-style: groove;">
+		
+			<h2 class="text-center"> {{procedure.pid}}&nbsp;:&nbsp;{{procedure.versions[selectedVersion].pname}}  <small> &#40; Author : {{procedure.versions[selectedVersion].owner}}  &#41; </small></h2> 
+			<h2 class="text-center"> Version : {{procedure.versions[selectedVersion].nversion}} </h2>
+
+			<br>
+
+			<hr2> Mappings : {{mappings}}<h2>
+
+
+
+			<div class="lead" ng-bind-html="procedure.versions[selectedVersion].content"></div>
+			
+	</div>
+
+
+</div>
+
+
+</div>

@@ -11,16 +11,25 @@
 			<label for="url">Enter the content relating to the QMS procedure  </label>
 			<br>
 			<div>
-                <textarea ckeditor="editorOptions" name="editor" ng-model="procedure.content" ng-change="save()"></textarea>
+                <textarea ckeditor="editorOptions" name="editor" ng-model="procedure.versions[procedure.baseline].content" ng-change="save()"></textarea>
             </div>			
 		</div>
 		
 		
 	<div class="btn-group">
   		<a href="#" type="button" class="btn btn-default" ng-click="preview()">Preview</a>
-  		<a href="#" type="submit" class="btn btn-primary" ng-click="uploadProcedure()">Submit</a>
+  		<a href="#" type="submit" class="btn btn-primary" ng-click="uploadProcedure()">Submit for approval</a>
 	</div>
 
 	</form>
+
+	<div class="alert alert-danger" ng-show="showSubmitError">
+		<table  class="table">
+			<thead> <tr> <th> Errors </th> </tr> </thead>
+			<tr ng-repeat='error in errors'>
+				<td> {{error}}</td>
+			</tr>
+		</table>
+	</div>
 	
 </div>

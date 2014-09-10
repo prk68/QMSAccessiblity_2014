@@ -5,7 +5,7 @@ var procedureCRUDCtrlModule = angular.module('procedureReaderCtrlModule', [])
 
 procedureCRUDCtrlModule.controller('procedureReaderController', function($scope, $http, $routeParams) {
 
-	$http.get('/procedure/'+$routeParams.id).success(function(data, status, headers, config) 
+	$http.get('/procedures/'+$routeParams.id).success(function(data, status, headers, config) 
 		{
 			console.log(data)
 			$scope.procedure = data

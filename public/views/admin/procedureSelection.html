@@ -1,0 +1,20 @@
+<form ng-submit="procedureSelected()" role="form">
+	<div class="form-group">
+		<label for="name">Select a procedure from the database</label>
+			<select class="form-control" ng-init="defaultLabel" ng-model="selectedProcedure" ng-change="updateSelection()">
+				<option ng-repeat="procedure in procedures">{{procedure.pid}}| {{procedure.versions[procedure.baseline].pname}}</option>
+				</option>
+			</select>
+		<br>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</div>
+
+	<div ng-show="showMsgSuc" class="alert alert-info">
+		Procedure removed successfully from server
+	</div>
+
+
+	<div ng-show="showMsgFail" class="alert alert-danger">
+		Procedure could not be removed from server
+	</div>
+</form>

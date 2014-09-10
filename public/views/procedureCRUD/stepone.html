@@ -15,30 +15,25 @@
 		<div class="form-group">
 			<label for="name">Procedure Name</label>
 			<input type="text" class="form-control" id="name"
-			ng-model="procedure.pname" required>
+			ng-model="procedure.versions[procedure.baseline].pname" required>
 		</div>
 
 		<div class="form-group">
-			<label for="assignee_name">Procedure Owner (LDAP Alias) </label>
-			<input type="text" class="form-control" id="owner"
-			ng-model="procedure.owner_name">
+			<label for="assignee_name">Procedure Reviewer </label>
+			<select class="form-control" ng-init="defaultLabel" ng-model="procedure.versions[procedure.baseline].reviewer" ng-change="updateSelection()">
+				<option ng-repeat="admin in admins">{{admin.alias}}</option>
+			</select>
 		</div>
 
 		<div class="form-group">
-			<label for="version">Current version</label>
-			<input type="text" class="form-control" id="version"
-			ng-model="procedure.nversion">
+			<label for="version"> Version you want to assign </label>
+			<input type="number" class="form-control" id="version"
+			ng-model="procedure.versions[procedure.baseline].nversion">
 		</div>
-
-		<div ng-show="edit" class="form-group">
-			<label for="creationDate">Date of Modification </label>
-			<input type="date" class="form-control" id="lastDate"
-			ng-model="procedure.date_of_modification">
-		</div>	
 
 		<div class="form-group">
 			<label for="name"><strong>Comments </strong></label>
-			<textarea class="form-control" ng-model="procedure.comments" rows="5"></textarea>
+			<textarea class="form-control" ng-model="procedure.versions[procedure.baseline].comments" rows="5"></textarea>
 		</div>
 
 	</form>

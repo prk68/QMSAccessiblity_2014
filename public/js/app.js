@@ -1,4 +1,4 @@
-var mod = angular.module('qmsAccessibility', ['ngRoute', 'appRoutes', 'procedureListCtrlModule', 'procedureReaderCtrlModule', 'ngSanitize', 'searchCtrlModule']);
+var mod = angular.module('qmsAccessibility', ['ngRoute', 'appRoutes', 'procedureListCtrlModule', 'procedureReaderCtrlModule', 'ngSanitize', 'searchCtrlModule', 'ngResource', 'dBProcedureServiceModule']);
 
 mod.controller('indexController', function($scope, $location){
 

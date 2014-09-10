@@ -8,22 +8,22 @@
 		
 		<div class="form-group">
 			<label class="checkbox-inline">
-				<input type="checkbox" id="roleCheckbox1" ng-model="procedure.role.pfl"> Portfolio
+				<input type="checkbox" id="roleCheckbox1" ng-model="procedure.versions[procedure.baseline].role.pfl"> <span>Portfolio </span>
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="roleCheckbox2" ng-model="procedure.role.eng"> Engineering
+				<input type="checkbox" id="roleCheckbox2" ng-model="procedure.versions[procedure.baseline].role.eng"> <span>Engineering</span>
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="roleCheckbox3" ng-model="procedure.role.cmz"> Commercialization
+				<input type="checkbox" id="roleCheckbox3" ng-model="procedure.versions[procedure.baseline].role.cmz"> <span>Commercialization</span>
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="roleCheckbox4" ng-model="procedure.role.ops"> Operations
+				<input type="checkbox" id="roleCheckbox4" ng-model="procedure.versions[procedure.baseline].role.ops"> <span>Operations</span>
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="roleCheckbox5" ng-model="procedure.role.sup"> Support
+				<input type="checkbox" id="roleCheckbox5" ng-model="procedure.versions[procedure.baseline].role.sup"> <span>Support</span>
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="roleCheckbox6" ng-model="procedure.role.qlty"> Quality Management
+				<input type="checkbox" id="roleCheckbox6" ng-model="procedure.versions[procedure.baseline].role.qlty"><span> Quality Management</span>
 			</label>			
 		</div>
 		
@@ -32,19 +32,19 @@
 		
 		<div class="form-group">			
 			<label class="checkbox-inline">
-				<input type="checkbox" id="rupCheckbox1" ng-model="procedure.phase.incp"> Inception
+				<input type="checkbox" id="rupCheckbox1" ng-model="procedure.versions[procedure.baseline].phase.incp"> Inception
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="rupCheckbox2" ng-model="procedure.phase.elb"> Elaboration
+				<input type="checkbox" id="rupCheckbox2" ng-model="procedure.versions[procedure.baseline].phase.elb"> Elaboration
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="rupCheckbox3" ng-model="procedure.phase.constr"> Construction
+				<input type="checkbox" id="rupCheckbox3" ng-model="procedure.versions[procedure.baseline].phase.constr"> Construction
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="rupCheckbox4" ng-model="procedure.phase.beta"> Beta
+				<input type="checkbox" id="rupCheckbox4" ng-model="procedure.versions[procedure.baseline].phase.beta"> Beta
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" id="rupCheckbox5" ng-model="procedure.phase.cmz"> Commercialization
+				<input type="checkbox" id="rupCheckbox5" ng-model="procedure.versions[procedure.baseline].phase.cmz"> Commercialization
 			</label>			
 		</div>
 		
@@ -59,33 +59,33 @@
 
 		<div class="form-group">
 
-			<div class="btn-group" data-toggle="buttons">
-				<label class="btn btn-primary"> <input type="radio" ng-model="procedure.global" ng-click="setGlobal()"> Global Procedure </label>
-				<label class="btn btn-primary"> <input type="radio" ng-click="setLocal()"> Local Procedure </label>				
+			<div  class="btn-group">
+			<label class="btn btn-primary" ng-click="setGlobal()"> Global Procedure </label>
+			<label class="btn btn-primary" ng-click="setGlobal()"> Local Procedure </label>	
 			</div>
 
 			<br><br><br>
 
 			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.abtc"> ABTC
+				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.abtc"> ABTC
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.atc"> AaTC
+				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.atc"> AaTC
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.brgc"> BRGC
+				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.brgc"> BRGC
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.htc"> HTC
+				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.htc"> HTC
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox"  ng-disabled="procedure.global" ng-model="procedure.center.mptc"> MPTC
+				<input type="checkbox"  ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.mptc"> MPTC
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.ntc"> SNTC
+				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.ntc"> SNTC
 			</label>
 			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.global" ng-model="procedure.center.ptc"> PTC
+				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.ptc"> PTC
 			</label>			
 		</div>
 
@@ -96,17 +96,17 @@
 		<br>
 		<div class="form-group">
 			<input type="text" class="form-control" size="100" id="question1"
-			ng-model="procedure.questions[0]">
+			ng-model="procedure.versions[procedure.baseline].questions[0]">
 		</div>
 		
 		<div class="form-group">			
 			<input type="text" class="form-control" size="100" id="question2"
-			ng-model="procedure.questions[1]">
+			ng-model="procedure.versions[procedure.baseline].questions[1]">
 		</div>
 		
 		<div class="form-group">
 			<input type="text" class="form-control" size="100" id="question3"
-			ng-model="procedure.questions[2]">
+			ng-model="procedure.versions[procedure.baseline].questions[2]">
 		</div>
 		
 	<ul class="pager">

@@ -6,7 +6,8 @@
 		"angular": "latest",
 		"angular-route": "latest",
 		"angular-resource": "latest",
-		"ckeditor": "4"
-		"jquery": "4"
+		"angular-sanitize": "latest",
+		"ckeditor": "latest",
+		"jquery": "latest"
 	}
 }

@@ -38,9 +38,14 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 				
 		})
 
-		.when('/procedures/library', {
+		.when('/procedure/library', {
 			templateUrl: '../views/procedureList.html',
-			controller: 'procedureListController'
+			controller: 'procedureListController',
+			resolve: {
+				multiProcLoader: function(multiProcedureLoader) {
+					return multiProcedureLoader();
+				}
+			},
 		})
 
 

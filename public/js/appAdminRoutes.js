@@ -31,7 +31,11 @@ angular.module('appAdminRoutes', []).config(['$routeProvider', '$locationProvide
 			resolve: {
 				procedureDBLoader: function(procedureFromDbInitializer) {
 					return procedureFromDbInitializer();
-				}
+				},
+
+				adminListLoader: function(adminProviderService) {
+					return adminProviderService();
+				},
 			},
 			access: { requiredLogin: true }
 		})
@@ -42,7 +46,10 @@ angular.module('appAdminRoutes', []).config(['$routeProvider', '$locationProvide
 			resolve: {
 				procedureDBLoader: function(procedureFromDbInitializer) {
 					return procedureFromDbInitializer();
-				}
+				},
+				adminListLoader: function(adminProviderService) {
+					return adminProviderService();
+				},
 			},
 			access: { requiredLogin: true }
 		})
@@ -53,7 +60,10 @@ angular.module('appAdminRoutes', []).config(['$routeProvider', '$locationProvide
 			resolve: {
 				procedureDBLoader: function(procedureFromDbInitializer) {
 					return procedureFromDbInitializer();
-				}
+				},
+				adminListLoader: function(adminProviderService) {
+					return adminProviderService();
+				},
 			},
 			access: { requiredLogin: true }
 		})
@@ -65,7 +75,10 @@ angular.module('appAdminRoutes', []).config(['$routeProvider', '$locationProvide
 			resolve: {
 				procedureDBLoader: function(procedureFromDbInitializer) {
 					return procedureFromDbInitializer();
-				}
+				},
+				adminListLoader: function(adminProviderService) {
+					return adminProviderService();
+				},
 			},
 			access: { requiredLogin: true }
 		})
@@ -81,14 +94,59 @@ angular.module('appAdminRoutes', []).config(['$routeProvider', '$locationProvide
 		})
 
 		.when('/admin/edit/selector', {
-			templateUrl: '../../views/admin/editProcedureSelection.html',
+			templateUrl: '../../views/admin/procedureSelection.html',
 			controller: 'editProcedureSelectorController',
+			resolve: {
+				multiProcLoader: function(multiProcedureLoader) {
+					return multiProcedureLoader();
+				}
+			},
 			access: { requiredLogin: true }			
 		})
 
 		.when('/admin/delete/selector', {
-			templateUrl: '../../views/admin/deleteProcedureSelection.html',
+			templateUrl: '../../views/admin/procedureSelection.html',
 			controller: 'deleteProcedureSelectorController',
+			resolve: {
+				multiProcLoader: function(multiProcedureLoader) {
+					return multiProcedureLoader();
+				}
+			},
+			access: { requiredLogin: true }	
+		})
+
+
+		.when('/admin/revert/selector', {
+			templateUrl: '../../views/admin/procedureSelection.html',
+			controller: 'revertProcedureSelectorController',
+			resolve: {
+				multiProcLoader: function(multiProcedureLoader) {
+					return multiProcedureLoader();
+				}
+			},
+			access: { requiredLogin: true }	
+		})
+
+		.when('/admin/procedure/revert', {
+			templateUrl: '../../views/admin/procedureRevList.html',
+			controller: 'procedureRevListController',
+			resolve: {
+				procedureDBLoader: function(procedureFromDbInitializer) {
+					return procedureFromDbInitializer();
+				},				
+			},
+			access: { requiredLogin: true }	
+		})
+
+
+		.when('/admin/trash', {
+			templateUrl: '../../views/admin/trashcan.html',
+			controller: 'trashCanController',
+			resolve: {
+				multiProcLoader: function(multiProcedureLoader) {
+					return multiProcedureLoader();
+				}
+			},
 			access: { requiredLogin: true }	
 		})
 

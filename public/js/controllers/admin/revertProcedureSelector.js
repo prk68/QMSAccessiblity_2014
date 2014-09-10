@@ -1,11 +1,9 @@
  
 
- var module = angular.module('deleteProcedureSelectorModule', []);
+ var module = angular.module('revertProcedureSelectorModule', []);
 
-var showMsgSuc = false
-var showMsgFail = false
 
- module.controller('deleteProcedureSelectorController', function($scope, $http, $location, $route, multiProcLoader){
+ module.controller('revertProcedureSelectorController', function($scope, $http, $location, $route, multiProcLoader){
 
 	$scope.procedures =[]
 	for(i=0; i<multiProcLoader.length; ++i)
@@ -18,21 +16,10 @@ var showMsgFail = false
 		$scope.selectedProcedure = $scope.procedures[0].pid + '| ' + $scope.procedures[0].versions[$scope.procedures[0].baseline].pname 
 		$scope.selectedPid = $scope.procedures[0].pid
 	}
-	$scope.showMsgSuc = showMsgSuc
-	$scope.showMsgFail = showMsgFail
-	console.log($scope.showMsg)
+	
 	$scope.procedureSelected = function() {
-								$http.post('/deleteProcedure/',{pid:$scope.selectedPid}).then(function(){
-									showMsgSuc = true
-									$route.reload()				
-
-								},
-								function()
-								{
-									$route.reload()
-									showMsgFail = true
-																
-								})
+								if($scope.selectedPid)
+									$location.path('/admin/procedure/revert').search({id: $scope.selectedPid});
 						}
 
 

@@ -8,10 +8,11 @@
 	<br>
 	<div id="reader" style="border: 1px solid #C0C0C0;padding:10px;border-width:thick;border-style: groove;">
 		
-			<h2 class="text-center"> {{procedure.pid}}&nbsp;:&nbsp;{{procedure.pname}}  <small> &#40; Author : {{procedure.owner_name}}  &#41; </small></h2> 
-			
-
-			<div class="lead" ng-bind-html="procedure.content"></div>
+			<h2 class="text-center"> {{procedure.pid}}&nbsp;:&nbsp;{{procedure.versions[procedure.baseline].pname}}  <small> &#40; Author : {{procedure.versions[procedure.baseline].owner}}  &#41; </small></h2> 
+			<br>
+			<h4 class="text-center">  Version : {{procedure.versions[procedure.baseline].nversion}} </h4>
+			<br>
+			<div class="lead" ng-bind-html="procedure.versions[procedure.baseline].content"></div>
 			
 	</div>
 </div>
