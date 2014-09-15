@@ -29,6 +29,7 @@
     "mongoose": "~3.6.13",
 	"express-jwt":"*",
 	"jsonwebtoken":"*",
-	"ldapjs":"*"	
+	"ldapjs":"*",	
+	"elasticsearch":"*",	
   }  
 }

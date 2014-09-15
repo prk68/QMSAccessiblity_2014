@@ -8,6 +8,7 @@
 		"angular-resource": "latest",
 		"angular-sanitize": "latest",
 		"ckeditor": "latest",
-		"jquery": "latest"
+		"jquery": "latest",
+		"string":"*"
 	}
 }

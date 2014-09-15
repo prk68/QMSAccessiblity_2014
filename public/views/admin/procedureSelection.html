@@ -1,16 +1,25 @@
+
+<h2 class="text-center"> {{heading}}</h2>
+
 <form ng-submit="procedureSelected()" role="form">
 	<div class="form-group">
 		<label for="name">Select a procedure from the database</label>
 			<select class="form-control" ng-init="defaultLabel" ng-model="selectedProcedure" ng-change="updateSelection()">
-				<option ng-repeat="procedure in procedures">{{procedure.pid}}| {{procedure.versions[procedure.baseline].pname}}</option>
+				<option ng-repeat="procedure in procedures">{{procedure.pid}}| {{procedure.pname}}</option>
 				</option>
 			</select>
 		<br>
+
+		<div ng-show="showComments" class="form-group">
+			<label for="name"><strong>Comments </strong></label>
+			<textarea class="form-control" ng-model="comments" rows="2"></textarea>
+		</div>
+
 		<button type="submit" class="btn btn-primary">Submit</button>
 	</div>
 
 	<div ng-show="showMsgSuc" class="alert alert-info">
-		Procedure removed successfully from server
+		Procedure {{procedure.pid}} disabled for public viewing
 	</div>
 
 

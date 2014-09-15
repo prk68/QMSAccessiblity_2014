@@ -53,4 +53,3 @@ global.db = mongoose.connect(uristring, function (err, res) {
   console.log(mongoose.connection.port);
   }
 });
-

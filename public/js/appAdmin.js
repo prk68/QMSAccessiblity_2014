@@ -1,4 +1,4 @@
-var mod = angular.module('qmsAdminApp', ['ngRoute', 'appAdminRoutes', 'ngCkeditor', 'defaultProcedureServiceModule', 'procedureCRUDCtrlModule', 'editProcedureSelectorModule','procedureRevListCtrl','revertProcedureSelectorModule', 'dBProcedureServiceModule', 'trashCanCtrlModule','adminProvider', 'deleteProcedureSelectorModule', 'ngSanitize']);
+var mod = angular.module('qmsAdminApp', ['ngRoute', 'appAdminRoutes', 'ngCkeditor', 'defaultProcedureServiceModule', 'procedureCRUDCtrlModule', 'editProcedureSelectorModule','procedureRevListCtrl','activityLogModule','revertProcedureSelectorModule', 'dBProcedureServiceModule', 'trashCanCtrlModule','adminProvider', 'deleteProcedureSelectorModule', 'ngSanitize']);
 
 
 mod.factory('authService', function($http, $window) {
@@ -14,6 +14,7 @@ mod.factory('authService', function($http, $window) {
         }
     }
 });
+
 
 
 
@@ -84,7 +85,9 @@ mod.run(['$rootScope', '$location',  'authService', '$window', function($rootSco
         }
 
         else if (nextRoute.$$route.access.requiredLogin === true && $window.sessionStorage.validated != "true") {
-            $location.path("/admin/login");
+            console.log("ghumm")
+            console.log($window.sessionStorage.validated)
+              $location.path("/admin/login");
         }
 
     });

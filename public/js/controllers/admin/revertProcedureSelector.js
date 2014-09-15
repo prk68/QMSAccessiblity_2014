@@ -5,15 +5,13 @@
 
  module.controller('revertProcedureSelectorController', function($scope, $http, $location, $route, multiProcLoader){
 
-	$scope.procedures =[]
-	for(i=0; i<multiProcLoader.length; ++i)
-		if(multiProcLoader[i].trashed == false)
-			$scope.procedures.push(multiProcLoader[i])
-	
+	$scope.procedures = multiProcLoader	
+	$scope.heading = "Revert Procedure"
 	$scope.selectedProcedure = '';
 	$scope.selectedPid = '';
-	if($scope.procedures.length > 0){
-		$scope.selectedProcedure = $scope.procedures[0].pid + '| ' + $scope.procedures[0].versions[$scope.procedures[0].baseline].pname 
+	if($scope.procedures.length > 0)
+	{
+		$scope.selectedProcedure = $scope.procedures[0].pid + '| ' + $scope.procedures[0].pname 
 		$scope.selectedPid = $scope.procedures[0].pid
 	}
 	

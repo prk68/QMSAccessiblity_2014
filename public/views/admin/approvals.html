@@ -1,0 +1,48 @@
+<div>
+
+<h2 class="text-center">Pending approvals</h2>
+
+<table  class="table">
+	<thead>
+		<tr>
+			<th> Procedure Id </th>
+			<th> Procedure name </th>
+			<th> Request type </th>
+			<th> Date of submission </th>
+			<th> Author </th>
+			<th> Reviewer </th>
+		</tr>
+	</thead>
+
+	<tr ng-repeat='result in results'>
+		<td> {{result.pid }}</td>
+		<td> {{result.pname }} </td>
+		<td> {{result.request_type}} </td>
+		<td> {{result.owner }} </td>
+		<td> {{result.reviewer }} </td>
+		<td> <button type="submit" class="btn btn-primary" ng-click="consultProcedure(procedure.pid)"> Approve </button> </td>
+		<td> <button type="submit" class="btn btn-primary" ng-click="restoreProcedure(procedure.pid)"> Reject  </button> </td>
+		<td> <button type="submit" class="btn btn-primary" ng-click="consultProcedure(procedure.pid)"> Discard </button> </td>
+		<td> <button type="submit" class="btn btn-primary" ng-click="restoreProcedure(procedure.pid)"> Rework  </button> </td>
+	</tr>
+</table>
+
+
+<div class="row">
+	<div class="col-xs-12">
+		<div ng-show="consultActivated" id="reader" style="border: 1px solid #C0C0C0;padding:10px;border-width:thick;border-style: groove;">
+			
+				<h2 class="text-center"> {{procedure.pid}}&nbsp;&nbsp;{{procedure.versions[procedure.baseline].pname}}  </h2> 
+				<h4 class="text-center"> Version : {{procedure.versions[procedure.baseline].nversion}} </h4>
+
+				<br>
+
+				<div class="lead" ng-bind-html="procedure.versions[procedure.baseline].content"></div>
+				
+		</div>
+	</div>
+</div
+
+
+
+</div>

@@ -16,6 +16,13 @@ isValidProcedure = function (procedure, $http)
 		isValid = false;
 	}
 	
+
+	if(!procedure.versions[procedure.baseline].pname || procedure.versions[procedure.baseline].pname.length == 0){
+		isValidProcedure.errors.push("procedure name is empty.")
+		isValid = false;
+	}
+
+
 	if(!procedure.versions[procedure.baseline].pname || procedure.versions[procedure.baseline].pname.length == 0){
 		isValidProcedure.errors.push("procedure Name is empty.")
 		isValid = false;
@@ -24,6 +31,11 @@ isValidProcedure = function (procedure, $http)
 	if(!angular.isNumber(procedure.versions[procedure.baseline].nversion)){
 		console.log('version')
 		isValidProcedure.errors.push("Version must be numeric.")
+		isValid = false;
+	}
+
+	if(!procedure.versions[procedure.baseline].content || procedure.versions[procedure.baseline].content.length == 0){
+		isValidProcedure.errors.push("Procedure has no content. Cannot create such procedures.")
 		isValid = false;
 	}
 	
@@ -58,6 +70,7 @@ procedureCRUDCtrlModule.controller('procedureCRUDController', function($scope, $
 			angular.copy(procedureDBLoader, editedProcedure);
 			editedProcedure.versions.push({})
 			angular.copy(editedProcedure.versions[editedProcedure.baseline], editedProcedure.versions[editedProcedure.versions.length-1]);
+			editedProcedure.orig_baseline = editedProcedure.baseline
 			editedProcedure.baseline = editedProcedure.versions.length-1;
 		}
 
@@ -70,6 +83,7 @@ procedureCRUDCtrlModule.controller('procedureCRUDController', function($scope, $
 		$scope.edit = false
 		$scope.url_extension = ''
 		$scope.procedure = procedureDefaultInitializer;
+		procedureDefaultInitializer.orig_baseline = procedureDefaultInitializer.baseline
 		console.log($scope.procedure.versions[$scope.procedure.baseline].global)
 	}
 	

@@ -7,16 +7,16 @@
 		<tr>
 			<th> Procedure ID </th>
 			<th> Procedure Name </th>
-			<th> Author </th>
-			<th> <a href="#/" ng-click="changeOder()">Last Modified Date</a></th>
+			<th> Version </th>
+			<th> Modified Date </th>
 		</tr>
 	</thead>
 
-	<tr ng-repeat='procedure in procedures | orderBy:orderByField:order'>
-		<td> {{procedure.pid }}</td>
-		<td> <a href="/reader/{{procedure.pid}}"> {{procedure.versions[procedure.baseline].pname}} </a></td>
-		<td> {{procedure.versions[procedure.baseline].owner}}</td>
-		<td> {{procedure.versions[procedure.baseline].date_of_modification }}</td>
+	<tr ng-repeat="result in results | orderBy:'date_of_modification'">
+		<td> {{result.pid }}</td>
+		<td> <a href="/reader/{{result.pid}}"> {{result.pname}} </a></td>
+		<td> {{result.nversion}} </td>
+		<td> {{result.date_of_modification | date:'shortDate' }}</td>
 	</tr>
 </table>
 </div>

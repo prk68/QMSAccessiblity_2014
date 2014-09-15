@@ -60,33 +60,34 @@
 		<div class="form-group">
 
 			<div  class="btn-group">
-			<label class="btn btn-primary" ng-click="setGlobal()"> Global Procedure </label>
-			<label class="btn btn-primary" ng-click="setGlobal()"> Local Procedure </label>	
+			<label class="btn btn-primary" ng-click="setGlobal()"> Toggle Global/Local </label> 
+
 			</div>
 
 			<br><br><br>
-
-			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.abtc"> ABTC
-			</label>
-			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.atc"> AaTC
-			</label>
-			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.brgc"> BRGC
-			</label>
-			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.htc"> HTC
-			</label>
-			<label class="checkbox-inline">
-				<input type="checkbox"  ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.mptc"> MPTC
-			</label>
-			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.ntc"> SNTC
-			</label>
-			<label class="checkbox-inline">
-				<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.ptc"> PTC
-			</label>			
+			<div ng-hide="procedure.versions[procedure.baseline].global">
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.abtc"> ABTC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.atc"> AaTC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.brgc"> BRGC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.htc"> HTC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox"  ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.mptc"> MPTC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.ntc"> SNTC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.versions[procedure.baseline].global" ng-model="procedure.versions[procedure.baseline].center.ptc"> PTC
+				</label>		
+			</div>	
 		</div>
 
 

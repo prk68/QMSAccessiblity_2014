@@ -5,17 +5,39 @@
 <table  class="table">
 	<thead>
 		<tr>
-			<th> Procedure ID </th>
-			<th> Procedure Name </th>
-			<th> Author </th>
+			<th> Procedure Id </th>
+			<th> Procedure name </th>
+			<th> Modified date </th>
+			<th> Last version </th>
 		</tr>
 	</thead>
 
 	<tr ng-repeat='procedure in procedures'>
 		<td> {{procedure.pid }}</td>
-		<td> <a href="/reader/{{procedure.pid}}"> {{procedure.versions[procedure.baseline].pname }} </a></td>
-		<td> {{procedure.versions[procedure.baseline].owner}}</td>
-		<td> <button type="submit" class="btn btn-primary" ng-click="restoreProcedure(procedure.pid)"> Restore </button> </td>
+		<td> {{procedure.pname }} </td>
+		<td>  {{procedure.date_of_modification | date:'short'}} </td>
+		<td> {{procedure.nversion }} </td>
+		<td> <button type="submit" class="btn btn-primary" ng-click="consultProcedure(procedure.pid)"> Preview </button> </td>
+		<td> <button type="submit" class="btn btn-primary" ng-click="restoreProcedure(procedure.pid, procedure.pname)"> Restore </button> </td>
 	</tr>
 </table>
+
+
+<div class="row">
+	<div class="col-xs-12">
+		<div ng-show="consultActivated" id="reader" style="border: 1px solid #C0C0C0;padding:10px;border-width:thick;border-style: groove;">
+			
+				<h2 class="text-center"> {{procedure.pid}}&nbsp;&nbsp;{{procedure.versions[procedure.baseline].pname}}  </h2> 
+				<h4 class="text-center"> Version : {{procedure.versions[procedure.baseline].nversion}} </h4>
+
+				<br>
+
+				<div class="lead" ng-bind-html="procedure.versions[procedure.baseline].content"></div>
+				
+		</div>
+	</div>
+</div
+
+
+
 </div>

@@ -143,10 +143,21 @@ angular.module('appAdminRoutes', []).config(['$routeProvider', '$locationProvide
 			templateUrl: '../../views/admin/trashcan.html',
 			controller: 'trashCanController',
 			resolve: {
-				multiProcLoader: function(multiProcedureLoader) {
-					return multiProcedureLoader();
-				}
-			},
+				multiTrashProcLoader: function(multiTrashProcedureLoader) {
+					return multiTrashProcedureLoader();
+				},				
+			},			
+			access: { requiredLogin: true }	
+		})
+
+		.when('/admin/log', {
+			templateUrl: '../../views/admin/activitylog.html',
+			controller: 'activityLogController',
+			resolve: {
+				activityLogLoader: function(activityLogLoader) {
+					return activityLogLoader();
+				},				
+			},			
 			access: { requiredLogin: true }	
 		})
 

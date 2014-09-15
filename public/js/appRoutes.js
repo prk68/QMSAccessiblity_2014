@@ -54,9 +54,19 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			controller: 'procedureReaderController'
 		})
 
-		.when('/search', {
+		.when('/searchQMS', {
 			templateUrl: '../views/searchResults.html',
 			controller: 'searchController'
+		})
+		
+		.when('/activity/log', {
+			templateUrl: '../views/activitylog.html',
+			controller: 'activityLogController',
+			resolve: {
+				activityLogLoader: function(activityLogLoader) {
+					return activityLogLoader();
+				},				
+			}		
 		})
 
 	

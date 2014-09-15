@@ -83,6 +83,11 @@ module.exports = function(app) {
 		res.sendfile(store_dir+req.params.id+".htm");
 	});*/
 	
+
+	
+	app.get('/admin/list', function(req, res) {
+		res.json(adminData);
+	});	
 	
 	app.post('/procedure/add', function(req, res) {
 		dbController.addToDB(req, res);
@@ -96,11 +101,10 @@ module.exports = function(app) {
 
 	app.get('/procedures', function(req, res) {
 		dbController.getAllProcedures(res);
-	});	
+	});
 
-
-	app.get('/admin/list', function(req, res) {
-		res.json(adminData);
+	app.get('/procedures/trash', function(req, res) {
+		dbController.getTrashedProcedures(res);
 	});	
 
 
@@ -108,6 +112,19 @@ module.exports = function(app) {
 		console.log("hoeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
 		dbController.getProcedure(req.params.id, res);
 	});
+
+
+	app.get('/procedures/trash/:id', function(req, res) {
+		console.log("hoeeeeeeehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+		dbController.getTrashedProcedure(req.params.id, res);
+	});
+
+	app.get('/search', function(req, res) {
+		console.log("search")
+		dbController.search(req, res);
+	});
+
+
 
 	app.post('/deleteProcedure', function(req, res) {
 		dbController.deleteProcedure(req, res);
@@ -120,6 +137,11 @@ module.exports = function(app) {
 	app.post('/admin/restore', function(req, res) {
 		dbController.restoreProcedure(req, res);
 	});
+
+	app.get('/activity', function(req, res) {
+		dbController.getActivityLog(req, res);
+	});
+
 
 	app.post('/login', function(req, res) {
 

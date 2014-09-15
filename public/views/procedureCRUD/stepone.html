@@ -15,7 +15,7 @@
 		<div class="form-group">
 			<label for="name">Procedure Name</label>
 			<input type="text" class="form-control" id="name"
-			ng-model="procedure.versions[procedure.baseline].pname" required>
+			ng-model="procedure.versions[procedure.baseline].pname" ng-readonly="edit" required>
 		</div>
 
 		<div class="form-group">
@@ -26,7 +26,13 @@
 		</div>
 
 		<div class="form-group">
-			<label for="version"> Version you want to assign </label>
+			<label for="version"> Version </label>
+			<input type="number" class="form-control" id="version"
+			ng-model="procedure.versions[procedure.orig_baseline].nversion" ng-readonly="edit">
+		</div>
+
+		<div ng-show='edit'class="form-group">
+			<label for="version"> Version after update </label>
 			<input type="number" class="form-control" id="version"
 			ng-model="procedure.versions[procedure.baseline].nversion">
 		</div>
