@@ -30,6 +30,8 @@
 	"express-jwt":"*",
 	"jsonwebtoken":"*",
 	"ldapjs":"*",	
-	"elasticsearch":"*",	
+	"elasticsearch":"*",
+	"string":"*"
   }  
 }
+
