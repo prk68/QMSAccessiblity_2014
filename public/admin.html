@@ -31,6 +31,13 @@
 
 <body ng-app="qmsAdminApp">
 
+	<!--[if IE ]>
+		<script type="text/javascript">
+			alert("Please use internet explorer 10 or above")
+    		window.location = "http://hub.slb.com";
+		</script>
+	<![endif]-->
+
 
 	<div class="container">
 
@@ -74,7 +81,7 @@
 									<li><a data-toggle="tab" data-target=".nav-collapse" href="#">Pending Approvals &nbsp; <span class="glyphicon glyphicon-adjust"></a></li>
 									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/trash">Trash Can &nbsp;<span class="glyphicon glyphicon-trash"></a></li>
 									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/log">Change Log &nbsp;<span class="glyphicon glyphicon-th"></a></li>
-									<li><a data-toggle="tab" data-target=".nav-collapse" href="#">Dead links &nbsp;<span class="glyphicon glyphicon-minus"></a></li>
+									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/deadlinks">Dead links &nbsp;<span class="glyphicon glyphicon-minus"></a></li>
 								</ul>
 							</li>
 
