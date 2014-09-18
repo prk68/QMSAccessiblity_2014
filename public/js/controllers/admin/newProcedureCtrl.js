@@ -72,6 +72,7 @@ procedureCRUDCtrlModule.controller('procedureCRUDController', function($scope, $
 			angular.copy(editedProcedure.versions[editedProcedure.baseline], editedProcedure.versions[editedProcedure.versions.length-1]);
 			editedProcedure.orig_baseline = editedProcedure.baseline
 			editedProcedure.baseline = editedProcedure.versions.length-1;
+			editedProcedure.versions[editedProcedure.baseline].date_of_modification = new Date()
 		}
 
 		$scope.procedure = editedProcedure;			

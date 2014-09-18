@@ -9,6 +9,7 @@
 		"angular-sanitize": "latest",
 		"ckeditor": "latest",
 		"jquery": "latest",
-		"string":"*"
+		"string":"*",
+		"angular-bootstrap": "*"
 	}
 }

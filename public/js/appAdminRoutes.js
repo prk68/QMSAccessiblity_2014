@@ -127,6 +127,20 @@ angular.module('appAdminRoutes', []).config(['$routeProvider', '$locationProvide
 			access: { requiredLogin: true }	
 		})
 
+
+		.when('/admin/links/selector', {
+			templateUrl: '../../views/admin/procedureSelection.html',
+			controller: 'linksSelectorController',
+			resolve: {
+				multiTrashProcLoader: function(multiTrashProcedureLoader) {
+					return multiTrashProcedureLoader();
+				}
+			},
+			access: { requiredLogin: true }	
+		})
+
+
+
 		.when('/admin/procedure/revert', {
 			templateUrl: '../../views/admin/procedureRevList.html',
 			controller: 'procedureRevListController',
@@ -161,6 +175,11 @@ angular.module('appAdminRoutes', []).config(['$routeProvider', '$locationProvide
 			access: { requiredLogin: true }	
 		})
 
+		.when('/admin/links', {
+			templateUrl: '../../views/admin/linksResolve.html',
+			controller: 'linksResolveController',
+			access: { requiredLogin: true }	
+		})
 
 		.otherwise({
 			redirectTo: function() {

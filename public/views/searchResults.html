@@ -1,9 +1,12 @@
 
-<div>
-	<h3>Search Results &#40; Number of results : {{hits.length}}  &#41; </h3>
-	<div class="row top-buffer">
+<div class="container">
+	<div class="row">
+		<h4 > <u>Search Results &#40; Number of results : {{hits.length}}  &#41; </u> </h4>
+	</div>
+	<div class="row"> </div>
+	<div class="row">
 		<ul>
-			<li ng-repeat='hit in hits'> <h4> <a href="/reader/{{hit.id}}"> <u> {{hit.id}} : {{hit.name}} </u> </a> <br>
+			<li ng-repeat='hit in hits'> <h4> <a href="/reader/{{hit.id}}">  {{hit.id}} : {{hit.name}}  </a> <br>
 				<div ng-bind-html="hit.snippets[0]"></div>				
 				<div ng-bind-html="hit.snippets[1]"></div>
 			 </li>

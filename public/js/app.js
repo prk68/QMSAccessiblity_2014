@@ -1,8 +1,8 @@
-var mod = angular.module('qmsAccessibility', ['ngRoute', 'appRoutes', 'procedureListCtrlModule', 'procedureReaderCtrlModule', 'ngSanitize', 'activityLogModule','searchCtrlModule', 'ngResource', 'dBProcedureServiceModule']);
+var mod = angular.module('qmsAccessibility', ['ngRoute', 'appRoutes', 'ui.bootstrap', 'procedureListCtrlModule', 'procedureReaderCtrlModule', 'ngSanitize', 'activityLogModule','searchCtrlModule', 'ngResource', 'dBProcedureServiceModule']);
 
 mod.controller('indexController', function($scope, $location){
 
-	$scope.searchQuery = "Search the Quality Management System"
+	$scope.searchQuery = ""
 
  	$scope.search = function() {
  							if($scope.searchQuery.length >0 ){

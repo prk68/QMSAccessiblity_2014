@@ -32,6 +32,12 @@ var procedureSchema = new mongoose.Schema({
 	versions : [procedureVersion],					
 });
 
+var draftProcedureSchema =  new mongoose.Schema({
+	
+	procedure : [procedureSchema],
+	rejections : [String]				
+});
+
 
 
 
@@ -49,20 +55,14 @@ var notificationSchema = new mongoose.Schema({
 });
 
 
-var deadLinksSchema = new mongoose.Schema({
-
-	pid   : 	String,
-	pname :  String,
-	deadRefs : [{pid: String, pname: String, snippets: [String]}]
-});
 
 
 var ProcedureVersion =  mongoose.model('ProcedureVersionSchema', procedureVersion);
 var Procedure = mongoose.model('ProcedureSchema', procedureSchema);
 var notification = mongoose.model('NotificationSchema', notificationSchema);
-var deadLinks = mongoose.model('deadLinksSchema', deadLinksSchema);
+var draftProcedure = mongoose.model('draftProcedureSchema', draftProcedureSchema);
 
-exports.procedureModel = Procedure;
-exports.procedureVersionModel = ProcedureVersion;
+exports.procedureModel = Procedure
+exports.procedureVersionModel = ProcedureVersion
 exports.notificationModel = notification
-exports.deadLinksModel = deadLinks
+exports.draftProcedureModel =  draftProcedure

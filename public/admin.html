@@ -10,6 +10,7 @@
 <script src="/libs/angular-route/angular-route.js"></script>
 <script src="/libs/angular-resource/angular-resource.js"></script>
 <script src="/libs/angular-sanitize/angular-sanitize.js"></script>
+<script src="/libs/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="/js/appAdminRoutes.js"></script>
 <script src="/js/appAdmin.js"></script>
 <script src="/js/services/defaultProcedure.js"></script>
@@ -21,7 +22,10 @@
 <script src="/js/controllers/admin/revertProcedureSelector.js"></script>
 <script src="/js/controllers/admin/trashCanCtrl.js"></script>
 <script src="/js/controllers/admin/procedureRevListCtrl.js"></script>
+<script src="/js/controllers/admin/linksResolveCtrl.js"></script>
 <script src="/js/controllers/admin/activityLogCtrl.js"></script>
+<script src="/js/controllers/admin/deadLinksCtrl.js"></script>
+<script src="/js/controllers/admin/linksSelectorCtrl.js"></script>
 <script src="/libs/ckeditor/ckeditor.js"></script>
 <script src="/js/directives/ckeditor/directives.js"></script>
 <link rel="stylesheet" href="/libs/bootstrap/dist/css/bootstrap.css">
@@ -62,7 +66,7 @@
 						<a class="navbar-brand" href="#">SIS Quality Management System Administration </a>
 					</div>
 
-					<div>
+					<div >
 						<ul class="nav nav-pills pull-right">
 							
 							<li><a data-toggle="tab" href="/admin/home">Home &nbsp; <span class="glyphicon glyphicon-home"></a></li>
@@ -76,12 +80,12 @@
 								</ul>
 							</li>
 									
-							<li class=" dropwdown"><a class="dropdown-toggle" data-toggle="dropdown">Dashboard &nbsp;<span class="glyphicon glyphicon-dashboard"> <span class="caret"></span> </a>
+							<li class=" dropwdown"><a class="dropdown-toggle" data-toggle="dropdown">Review &nbsp;<span class="glyphicon glyphicon-dashboard"> <span class="caret"></span> </a>
 								<ul class="dropdown-menu">
 									<li><a data-toggle="tab" data-target=".nav-collapse" href="#">Pending Approvals &nbsp; <span class="glyphicon glyphicon-adjust"></a></li>
 									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/trash">Trash Can &nbsp;<span class="glyphicon glyphicon-trash"></a></li>
 									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/log">Change Log &nbsp;<span class="glyphicon glyphicon-th"></a></li>
-									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/deadlinks">Dead links &nbsp;<span class="glyphicon glyphicon-minus"></a></li>
+									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/links/selector">Dead links &nbsp;<span class="glyphicon glyphicon-minus"></a></li>
 								</ul>
 							</li>
 

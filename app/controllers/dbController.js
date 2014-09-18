@@ -87,7 +87,7 @@ var updateInDB = function(request, response)
             procedureModel.find({pid: sentProcedure.pid}, function(err, result){
            		if(!err)
             	{
-            		client.index({
+            		client.update({
 						index: 'procedurecontent',
 						type: 'String',
 						id: sentProcedure.pid,
@@ -98,21 +98,21 @@ var updateInDB = function(request, response)
 						}, 
 						function(err){
 							if(!err)
-								console.log("Finished adding content onto elastic db : " + newProcedure.pid);
+								console.log("Finished adding content onto elastic db : " + sentProcedure.pid);
 					})
 
-					client.index({
+					client.update({
 						index: 'procedurecontenthtml',
 						type: 'String',
-						id: newProcedure.pid,
+						id: sentProcedure.pid,
 						body: {							
-							name: newProcedure.versions[sentProcedure.baseline].pname,
+							name: sentProcedure.versions[sentProcedure.baseline].pname,
 						    content : sentProcedure.versions[sentProcedure.baseline].content
 						 }
 						}, 
 						function(err){
 							if(!err)
-								console.log("Finished adding content onto elastic db html: " + newProcedure.pid);
+								console.log("Finished adding content onto elastic db html: " + sentProcedure.pid);
 					})
             		  		
             	    //Add a entry in the notification database
@@ -256,15 +256,11 @@ var deleteProcedure = function(request, response){
 				newNotification.comments = request.body.comments
 
 				newNotification.save(function(err){
-				if(err)
-					response.send(501, 'could not be added in the db'); 
-				else
+					if(err)
+						response.send(501, 'could not be added in the activity db'); 
+				
 					response.send('ok')
 				})
-
-				///Fish for dead links
-				search({query:'/'+request.body.pid})
-
 	        }
 		});
 	}
@@ -378,37 +374,6 @@ var search = function(request, response){
 	
 }
 
-var searchHtml = function(query)
-{
-
-	client.search({
-		  index: 'procedurecontent',
-		  body: {
-		    query: {
-		      match: {
-		        content: query
-		      }
-		    },
-		  
-		    highlight: {
-		    	fields: {"content": {"number_of_fragments": 2}}
-		    }
-
-		  }
-		}, function (error, result) {
-			var obj = []
-			if(error)
-				response.status(500).send()
-
-			for(i=0; i<result.hits.hits.length; ++i)
-			{
-				obj.push({id:result.hits.hits[i]._id, name:result.hits.hits[i]._source.name,  snippets: result.hits.hits[i].highlight.content})
-
-			}
-
-		  	return obj
-	})
-}
 
 
 var getActivityLog =  function(req, res)
@@ -424,14 +389,49 @@ var getActivityLog =  function(req, res)
 	});
 }
 
+
+var resolveLinks = function(request, response)
+{
+	client.search({
+		  index: 'procedurecontenthtml',
+		  body: {
+		    query: {
+		      match: {
+		        content: '/'+request.query.id
+		      }
+		    },
+		  
+		    highlight: {
+		    	fields: {"content": {"number_of_fragments": 2}}
+		    }
+
+		  }
+		}, function (error, result) {
+			var obj = []
+			if(error)
+				response.status(500).send()
+
+			console.log("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
+			for(i=0; i<result.hits.hits.length; ++i)
+			{
+				obj.push({id:result.hits.hits[i]._id, name:result.hits.hits[i]._source.name,  snippets: result.hits.hits[i].highlight.content})
+
+			}
+
+			response.send(obj)			
+	})
+}
+
+
 exports.getProcedure =  getProcedure;
 exports.getTrashedProcedure =  getTrashedProcedure;
 exports.getAllProcedures = getAllProcedures;
 exports.getTrashedProcedures = getTrashedProcedures;
 exports.addToDB = addProcedureToDataBase;
-exports.deleteProcedure  =deleteProcedure
-exports.restoreProcedure  =restoreProcedure
+exports.deleteProcedure  = deleteProcedure
+exports.restoreProcedure  = restoreProcedure
 exports.updateInDB = updateInDB
 exports.revertProcedure = revertProcedure
 exports.search = search
 exports.getActivityLog = getActivityLog
+exports.resolveLinks = resolveLinks

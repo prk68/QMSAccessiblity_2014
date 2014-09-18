@@ -1,43 +1,7 @@
 angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider, $location) {
 
 	$routeProvider
-
-		.when('/addprocedure/step1', {
-			templateUrl: '../views/procedureCRUD/stepone.html',
-			controller: 'procedureCRUDController'
-		
-		})
-
-		.when('/addprocedure/step2', {
-			templateUrl: '../views/procedureCRUD/steptwo.html',
-			controller: 'procedureCRUDController'
-		})
-
-		.when('/addprocedure/step3', {
-			templateUrl: '../views/procedureCRUD/stepthree.html',
-			controller: 'procedureCRUDController'
-		})
-
-		.when('/addprocedure/step4', {
-			templateUrl: '../views/procedureCRUD/stepfour.html',
-			controller: 'procedureCRUDController'
-		})
-
-		.when('/addprocedure/step5', {
-			templateUrl: '../views/procedureCRUD/stepfive.html',
-			controller: 'procedureCRUDController'
-		})
-
-		.when('/fail-procedure-add', {
-			templateUrl: '../views/admin/fail-procedure-add.html',
-			
-		})
-		
-		.when('/sucess-procedure-add', {
-			templateUrl: '../views/admin/sucess-procedure-add.html',
-				
-		})
-
+	
 		.when('/procedure/library', {
 			templateUrl: '../views/procedureList.html',
 			controller: 'procedureListController',
@@ -48,17 +12,6 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			},
 		})
 
-
-		.when('/reader/:id', {
-			templateUrl: '../views/procedureReader.html',
-			controller: 'procedureReaderController'
-		})
-
-		.when('/searchQMS', {
-			templateUrl: '../views/searchResults.html',
-			controller: 'searchController'
-		})
-		
 		.when('/activity/log', {
 			templateUrl: '../views/activitylog.html',
 			controller: 'activityLogController',
@@ -68,6 +21,28 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 				},				
 			}		
 		})
+
+		.when('/statement', {
+			templateUrl: '../views/construction.html',
+		})
+
+		.when('/answers', {
+			templateUrl: '../views/construction.html',
+		})
+
+		.when('/templates', {
+			templateUrl: '../views/construction.html',
+		})
+
+		.when('/reader/:id', {
+			templateUrl: '../views/procedureReader.html',
+			controller: 'procedureReaderController'
+		})
+
+		.when('/searchQMS', {
+			templateUrl: '../views/searchResults.html',
+			controller: 'searchController'
+		})		
 
 	
 		.otherwise({

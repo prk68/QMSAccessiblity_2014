@@ -8,9 +8,6 @@ var expressJwt = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var secret ="prithvi"
 var ldap = require('ldapjs');
-var ldap_client = ldap.createClient({
-  url: 'ldap://ldap.slb.com:389'
-});
 var baseDn = 'O=SLB,C=AN'
 var ldap_opts= {filter:"", scope:'sub'}
 var adminData = require('./admins.json'); 
@@ -33,7 +30,7 @@ function getFileName(filename) {
 function sendToken(alias, res)
 {
 	// We are sending the profile inside the token
-  	var token = jwt.sign({uname:alias}, secret, { expiresInMinutes: 60 });
+  	var token = jwt.sign({uname:alias}, secret);
 
   	res.send({ token: token })
 }
@@ -124,6 +121,10 @@ module.exports = function(app) {
 		dbController.search(req, res);
 	});
 
+	app.get('/searchHtml', function(req, res) {
+		console.log("search")
+		dbController.resolveLinks(req, res);
+	});
 
 
 	app.post('/deleteProcedure', function(req, res) {
@@ -142,6 +143,14 @@ module.exports = function(app) {
 		dbController.getActivityLog(req, res);
 	});
 
+
+	app.post('/admin/resolve/deadlinks', function(req, res) {
+		dbController.resolveDeadLinks(req, res);
+	});
+
+	app.get('/deadlinks', function(req, res) {
+		dbController.getDeadLinks(req, res);
+	});
 
 	app.post('/login', function(req, res) {
 
@@ -174,13 +183,32 @@ module.exports = function(app) {
 	}	
 
 	if(validAdmin == false)
+	{
 		res.send(401, 'could not authenticate');
+		return;
+	}
+
+	var ldap_client = ldap.createClient({
+  		url: 'ldap://ldap.slb.com:389'
+	});
 
 	//search
 	ldap_client.search(baseDn, ldap_opts, function(err, result){
 		console.log(baseDn)
 		console.log(result)	
 		console.log(err)
+
+		if(err)
+		{
+			res.send(401, 'could not authenticate');
+			return
+		}
+
+		result.on('error', function(err) {
+			res.send(401, 'could not authenticate');
+		});
+
+
 		result.on('searchEntry', function(entry) {
 			var dn = entry.object.dn
 			// Try to bind and if sucess return authentication token

@@ -19,7 +19,6 @@ procedureFromDB.factory('activityLogResource', ['$resource', function($resource)
 }]);
 
 
-
 procedureFromDB.factory('procedureFromDbInitializer', ['procedureResource', '$q', '$route' , function(procedureResource, $q, $route){
 
 	return function(){
@@ -131,3 +130,6 @@ procedureFromDB.factory('activityLogLoader', ['activityLogResource', '$q', '$rou
 		return delay.promise
 	}
 }]);	
+
+
+

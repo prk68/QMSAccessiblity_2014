@@ -14,6 +14,7 @@ defaultProcedureService.factory('procedureDefaultInitializer', function(){
 		instance.reviewer = 'SNagalur'
 		instance.nversion = 1.0
 		instance.date_of_modification = new Date()
+		console.log(instance.date_of_modification.valueOf())
 		instance.comments = ""
 		
 		instance.role = {}

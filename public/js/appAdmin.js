@@ -1,4 +1,4 @@
-var mod = angular.module('qmsAdminApp', ['ngRoute', 'appAdminRoutes', 'ngCkeditor', 'defaultProcedureServiceModule', 'procedureCRUDCtrlModule', 'editProcedureSelectorModule','procedureRevListCtrl','activityLogModule','revertProcedureSelectorModule', 'dBProcedureServiceModule', 'trashCanCtrlModule','adminProvider', 'deleteProcedureSelectorModule', 'ngSanitize']);
+var mod = angular.module('qmsAdminApp', ['ngRoute', 'appAdminRoutes', 'ngCkeditor', 'ui.bootstrap', 'linksResolveModule', 'linksSelectorModule', 'defaultProcedureServiceModule', 'deadLinksLogModule', 'procedureCRUDCtrlModule', 'editProcedureSelectorModule','procedureRevListCtrl','activityLogModule','revertProcedureSelectorModule', 'dBProcedureServiceModule', 'trashCanCtrlModule','adminProvider', 'deleteProcedureSelectorModule', 'ngSanitize']);
 
 
 mod.factory('authService', function($http, $window) {
@@ -16,12 +16,10 @@ mod.factory('authService', function($http, $window) {
 });
 
 
-
-
 mod.controller('loginController', function($scope, $location, authService, $window){
 
 
-	$scope.profile = {alias:'alias', password:''};
+	$scope.profile = {alias:'', password:''};
   $scope.showErr = false;
 	console.log('costaaaaaaaaaaaa')
   $scope.entered   = false
@@ -74,6 +72,7 @@ mod.config(function ($httpProvider) {
 });
 
 mod.run(['$rootScope', '$location',  'authService', '$window', function($rootScope, $location, authService, $window) {
+    $rootScope.validated = ( $window.sessionStorage.validated == "true")
     $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
         console.log($window.sessionStorage)
         console.log(nextRoute)
@@ -82,6 +81,10 @@ mod.run(['$rootScope', '$location',  'authService', '$window', function($rootSco
             authService.logOut()
             console.log($window.sessionStorage)
             $location.path("/admin/login");
+        }
+
+         if (nextRoute.originalPath == "/admin" && $window.sessionStorage.validated == "true") {
+            $location.path("/admin/home");
         }
 
         else if (nextRoute.$$route.access.requiredLogin === true && $window.sessionStorage.validated != "true") {

@@ -1,0 +1,32 @@
+<h2 class="text-center">Dead Links</h2>
+
+<div class="top-buffer"> </div>
+
+<form class="form-inline" role="form" ng-submit="filter()" >
+	<div class="form-group">
+	
+			<label  for="id">Procedure</label>
+				<select class="form-control" ng-init="defaultLabel" ng-model="selectedPid" ng-change="updateSelection()">
+					<option ng-repeat="pid in pids">{{pid}}</option>
+					</option>
+				</select>
+		
+			<button type="submit" class="btn btn-primary">Filter</button>
+		
+
+	</div>
+</form>
+
+<ul>
+
+<li ng-repeat="result in results"> <u> Trashed Procedure {{result.pid}} : {{result.pname}} </u>
+	<ul>
+		<li ng-repeat="hit in result.references">
+			 <u> <a href="http://localhost:8080/reader/"+{{hit.id}} target="_blank">Invalid reference in {{hit.id}} : {{hit.name}} </u> </a>
+			 	<div ng-bind-html="hit.snippets[0]"></div>				
+				<div ng-bind-html="hit.snippets[1]"></div>
+		</li>
+	</ul>
+</li>
+
+</ul>

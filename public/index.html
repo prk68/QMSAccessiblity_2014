@@ -4,6 +4,7 @@
 <head>
 <title> SIS Quality Management System</title>
 <script src="/libs/jquery/dist/jquery.min.js"></script>
+<script src="/libs/bootstrap/dist/js/bootstrap.js">
 <script src="/libs/string/lib/string.js"></script>
 <link rel="stylesheet" href="/static-local/css/mh.css">
 <link rel="stylesheet" href="/libs/bootstrap/dist/css/bootstrap.css">
@@ -12,6 +13,7 @@
 <script src="/libs/angular-sanitize/angular-sanitize.js"></script>
 <script src="/libs/angular-route/angular-route.js"></script>
 <script src="/libs/angular-resource/angular-resource.js"></script>
+<script src="/libs/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="/js/appRoutes.js"></script>
 <script src="/js/app.js"></script>
 <script src="/js/controllers/procedureListCtrl.js"></script>
@@ -36,7 +38,7 @@
 
 		<div id="masthead">
 		    <div id="mhnav" class="mhnav"> 
-		        </li><li><a href="http://hub.slb.com">HUB</a></li>
+		        <li><a href="http://hub.slb.com">HUB</a></li>
 		        <form id="mhform" method="get" action="http://search.slb.com/search"> 
 		            <div id="mhbox"> 
 		                <input type="text" id="mhq" name="q" placeholder="Search..." size="32" tabindex="1"> 
@@ -46,27 +48,30 @@
 		        </form> 
 		    </div> 
 		</div>
-	</div>
-
+	
 	<div ng-app="qmsAccessibility">
-		<div id="wrap">
-			
-			<div id="main" class="container">
+		<div id="bodywrap">		
 			
 				<div class="row-fluid">
 					<div class="span12">
 				
 						<nav class="navbar navbar-default" role="navigation">	
 							<div class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#options">
+									<span class="sr-only">Toggle navigation</span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+								</button>
 								<a class="navbar-brand" href="/home">SIS Quality Management System </a>
 							</div>
-							<div>
+							<div class="collapse navbar-collapse" id="options">
 								<ul class="nav navbar-nav">
-									<li><a href="#">Quality Statement</a></li>
-									<li ><a href="#">How do I ? </a></li>
+									<li><a href="/statement">Quality Statement</a></li>
+									<li ><a href="/answers">How do I ? </a></li>
 									<li><a href="/activity/log">Recent Changes</a></li>
 									<li><a href="/procedure/library">Procedures Libray</a></li>
-									<li><a href="#">Forms and Work  Instructions</a></li>
+									<li><a href="/templates">Forms and Work  Instructions</a></li>
 								</ul>	
 							</div>
 						</nav>
@@ -75,11 +80,11 @@
 
 
 				<div class="row top-buffer">
-					<div class="col-xs-6 col-xs-offset-2" ng-controller='indexController'>
+					<div class="col-xs-6 col-xs-offset-3" ng-controller='indexController'>
 				    	<div class="input-group input-group-lg">
-						    <input type="search" class="form-control" ng-model="searchQuery">
+						    <input type="search" autofocus="autofocus" class="form-control" ng-model="searchQuery">
 						    <span class="input-group-btn">
-						    <button class="btn btn-primary" type="button" ng-click="search()"><span class="glyphicon glyphicon-search"></span></button>
+						    <button class="btn btn-primary" type="submit" ng-click="search()"><span class="glyphicon glyphicon-search"></span></button>
 						    </span>
 					   </div>
 				    </div>
@@ -90,22 +95,19 @@
 	    			<div ng-view> </div>
 	    		</div>
 
-	    	</div>
+	    		<div id="bodypush"> </div>
 
-	    	<div id="push"></div>
+	    	</div>	    	
 	    </div>
-    </div>
-
-    <div class="container">
-	    <div class="footer">
-	    	<div class="container-fluid">
-	    		<div class="row-fluid">
-	    			<div class="col-xs-offset-4">
-	    				<p >Feedback<a href="mailto:sis-qms@slb.com">&nbsp; Quality Systems Manager</a> &nbsp;&nbsp; | &nbsp;&nbsp; <a target"_blank" href="/admin">Admin</a> </p>
-					</div>
+    
+	    <div id="pagefooter">
+	    	<div class="row-fluid">
+	    		<div class="col-xs-offset-4">
+	    			<p >Feedback<a href="mailto:sis-qms@slb.com">&nbsp; Quality Systems Manager</a> &nbsp;&nbsp; | &nbsp;&nbsp; <a target"_blank" href="/admin">Admin</a> </p>
 				</div>
 			</div>
-		</div>    
+		</div>
+ 
 	</div>
 
 </body>

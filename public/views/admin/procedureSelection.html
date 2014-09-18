@@ -22,6 +22,17 @@
 		Procedure {{procedure.pid}} disabled for public viewing
 	</div>
 
+	<div ng-show="showDeadLinks" class="alert alert-warning">
+		<p> Warning: {{procedure.pid}} is being referred in </p>
+		<br>
+		<ul>
+			<li ng-repeat="hit in deadlinks"><h4> <a href="/reader/{{hit.id}}"> <u> {{hit.id}} : {{hit.name}} </u> </a> <br>
+				<div> {{hit.snippets[0] }}</div>				
+				<div> {{hit.snippets[1] }}</div>
+			 </li>
+		</ul>
+	</div>
+
 
 	<div ng-show="showMsgFail" class="alert alert-danger">
 		Procedure could not be removed from server

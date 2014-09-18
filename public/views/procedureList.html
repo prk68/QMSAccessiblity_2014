@@ -1,7 +1,30 @@
 <div>
 
-<h3>Procedure Library</h3>
+<h2>Procedure Library</h2>
 <br>
+
+<form class="form-inline" role="form" ng-submit="filterByDate()" >
+	<div class="form-group">
+		<p class="input-group input-group-lg">
+              <input type="date" class="form-control" datepicker-popup="{{format}}" ng-model="ldt" is-open="openedL" datepicker-options="dateOptions">
+              <span class="input-group-btn">
+                <button class="btn btn-lg" ng-click="openL($event)"><span class="glyphicon glyphicon-calendar"></span></button>
+              </span>
+        </p>
+
+        <p class="input-group input-group-lg">
+              <input type="date" class="form-control" datepicker-popup="{{format}}" ng-model="udt" is-open="openedU"  datepicker-options="dateOptions" />
+              <span class="input-group-btn">
+                <button class="btn btn-lg" ng-click="openU($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+        </p>
+		
+	
+		<p class="input-group input-group-lg"> <button type="submit" class="btn btn-primary btn-lg" ng-click="filterByDate()">Filter by modified date</button> </p>
+	</div>
+</form>
+ 
+
 <table  class="table table-striped">
 	<thead>
 		<tr>
@@ -12,7 +35,7 @@
 		</tr>
 	</thead>
 
-	<tr ng-repeat="result in results | orderBy:'date_of_modification'">
+	<tr ng-repeat="result in results" ng-show="result.show">
 		<td> {{result.pid }}</td>
 		<td> <a href="/reader/{{result.pid}}"> {{result.pname}} </a></td>
 		<td> {{result.nversion}} </td>
@@ -20,3 +43,9 @@
 	</tr>
 </table>
 </div>
+
+
+
+
+
+
