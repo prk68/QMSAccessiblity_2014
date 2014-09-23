@@ -17,8 +17,24 @@
 	
 	$scope.procedureSelected = function() {
 								if($scope.selectedPid)
-									$location.path('/admin/procedure/revert').search({id: $scope.selectedPid});
-						}
+								{
+									$http.get('/admin/locked/'+$scope.selectedPid).then(
+									function(obj)
+									{
+										if(obj.data.locked)
+										{
+											$scope.showMsgLock = true
+											$scope.locker = obj.data.locker
+										}
+										else
+											$location.path('/admin/procedure/revert').search({id: $scope.selectedPid});
+									}, 
+									function(err)
+									{
+										$location.path('/admin/fail-selection')
+									})
+								}
+							}
 
 
 	$scope.updateSelection = function() {

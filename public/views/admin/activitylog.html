@@ -1,58 +1,63 @@
 <div>
 
-<h2 class="text-center">Activity Log</h2>
+<h2 class="text-center"> <b> Activity Log <b> </h2>
 
 <div class="top-buffer"> </div>
-
-<form class="form-inline" role="form" ng-submit="filter()" >
-	<div class="form-group">
-	
-			<label  for="id">Procedure</label>
-				<select class="form-control" ng-init="defaultLabel" ng-model="selectedPid" ng-change="updateSelection()">
-					<option ng-repeat="pid in pids">{{pid}}</option>
-					</option>
-				</select>
-		
-			&nbsp;&nbsp;
-			<label  for="action">Activity</label>
-				<select class="form-control" ng-init="defaultLabel" ng-model="selectedType" ng-change="updateSelection()">
-					<option ng-repeat="type in types">{{type}}</option>
-					</option>
-				</select>
-		
-			&nbsp;&nbsp;
+<div class="row">
+	<div class="col-xs-8 col-xs-offset-3">
+		<form class="form-inline" role="form" ng-submit="filter()" >
+			<div class="form-group">
 			
-			<label  for="author">Author</label>
-				<select class="form-control" ng-init="defaultLabel" ng-model="selectedOwner" ng-change="updateSelection()">
-					<option ng-repeat="owner in owners">{{owner}}</option>
-					</option>
-				</select>
-		
-			&nbsp;&nbsp;
+					<label  for="id">Procedure</label>
+						<select class="form-control" ng-init="defaultLabel" ng-model="selectedPid" ng-change="updateSelection()">
+							<option ng-repeat="pid in pids">{{pid}}</option>
+							</option>
+						</select>
+				
+					&nbsp;&nbsp;
+					<label  for="action">Activity</label>
+						<select class="form-control" ng-init="defaultLabel" ng-model="selectedType" ng-change="updateSelection()">
+							<option ng-repeat="type in types">{{type}}</option>
+							</option>
+						</select>
+				
+					&nbsp;&nbsp;
+					
+					<label  for="author">Author</label>
+						<select class="form-control" ng-init="defaultLabel" ng-model="selectedOwner" ng-change="updateSelection()">
+							<option ng-repeat="owner in owners">{{owner}}</option>
+							</option>
+						</select>
+				
+					&nbsp;&nbsp;
 
+					
 
+					<div class="btn-group">
+					  	<button type="button" class="btn btn-primary" ng-click="filter()">Filter</button>
+					 	<button type="button" class="btn btn-default" ng-click="showAll()">Show All</button>
+					 </div>				
 
-			<button type="submit" class="btn btn-primary">Filter</button>
-		
+			</div>
+			</div>
 
+		</form>
 	</div>
-	</div>
-
-</form>
+</div>
 
 
 
 <table  class="table table-striped">
 
 	<tr ng-repeat='result in results' ng-show="result.show" showonhoverparent>
-		<td ng-show="result.type =='created'"> <span class="glyphicon glyphicon-plus"> </td>
-		<td ng-show="result.type =='updated'"> <span class="glyphicon glyphicon-edit"> </td>
-		<td ng-show="result.type =='removed'"> <span class="glyphicon glyphicon-remove"> </td>
-		<td ng-show="result.type =='reverted'"> <span class="glyphicon glyphicon-repeat"> </td>
-		<td ng-show="result.type =='restored'"> <span class="glyphicon glyphicon-paperclip"> </td>
+		<td ng-show="result.type =='Created'"> <span class="glyphicon glyphicon-plus"> </td>
+		<td ng-show="result.type =='Edited'"> <span class="glyphicon glyphicon-edit"> </td>
+		<td ng-show="result.type =='Removed'"> <span class="glyphicon glyphicon-remove"> </td>
+		<td ng-show="result.type =='Reverted'"> <span class="glyphicon glyphicon-repeat"> </td>
+		<td ng-show="result.type =='Restored'"> <span class="glyphicon glyphicon-paperclip"> </td>
 
-		<td> Procedure {{result.pid}}, title: {{result.pname}}, was {{result.type}} by {{result.author}} on {{result.date|date:'short'}}
-		<span ng-show="result.type =='reverted'"> &nbsp;[old version: {{result.old_version}} to new version {{result.new_version}}] </span> </td>
+		<td> Procedure <b>{{result.pid}} </b>, title: <b>{{result.pname}}</b>, was <b>{{result.type}}</b>, by <b>{{result.author}}</b>, on <b>{{result.date|date:'short'}}</b>
+		<span ng-show="result.type =='Reverted' || result.type =='Edited'"> &nbsp;[Version: {{result.version}}] </span> </td>
 
 		<td> {{result.comments}} </td>
 	</tr>

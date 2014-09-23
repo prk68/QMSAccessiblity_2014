@@ -3,33 +3,30 @@
 <h2 class="text-center">Versions contained in the procedure for {{procedure.pid}}</h3>
 <br>
 
-<h3> <b> Active version {{baseline}} </b> </h3>
+<h3> Current active version {{procedure.active_version}} </h3>
 
 <br>
 
 
 <div class="row">
-	<div class="col-xs-8">
+	<div class="col-xs-12">
 		<table  class="table">
 			<thead>
 				<tr>
 					<th> Revision </th>
 					<th> Modified Date </th>
-					
+					<th> </th>
 				</tr>
 			</thead>
 
 			<tr ng-repeat='rev in revisions'>
-				<td> {{rev.version}} &nbsp; <span ng-show="rev.version==baseline" class="glyphicon glyphicon-star"></span> </td>
+				<td> {{rev.version}}</td>
 				<td> {{rev.modifDate | date: 'short'}}</td>
 				<td> <button type="submit" class="btn btn-primary" ng-click="consultProcedure(rev.version)"> Preview  </a></td>
-				<td> <button type="submit" class="btn btn-primary" ng-click="revertProcedure(rev.version)"> Revert and publish  </a></td>				
+				<td> <button type="submit" class="btn btn-primary" ng-click="restoreProcedure(rev.version)"> Revert and publish  </a></td>				
 			</tr>
 		</table>
 	</div>
-
-	>
-</div>
 
 </div>
 
@@ -37,12 +34,12 @@
 	<div class="col-xs-12">
 		<div ng-show="consultActivated" id="reader" style="border: 1px solid #C0C0C0;padding:10px;border-width:thick;border-style: groove;">
 			
-				<h2 class="text-center"> {{archiveVersion.pid}}&nbsp;&nbsp;{{archiveVersion.pname}}  </h2> 
-				<h4 class="text-center"> Version : {{archiveVersion.version}} </h4>
+				<h2 class="text-center"> {{procedure.pid}}&nbsp;&nbsp;{{procedure.versions[selectedVersion].pname}}  </h2> 
+				<h4 class="text-center"> Version : {{procedure.versions[selectedVersion].nversion}} </h4>
 
 				<br>
 
-				<div class="lead" ng-bind-html="archiveVersion.data.content"></div>
+				<div class="lead" ng-bind-html="procedure.versions[selectedVersion].content"></div>
 
 				<div class="alert alert-info"> Mappings : {{mappings}} 	</div>
 		</div>

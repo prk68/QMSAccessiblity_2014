@@ -1,0 +1,33 @@
+
+<div>
+<ul class="nav nav-tabs" role="tablist">
+  <li><a href="/admin/{{action}}/initialization{{url_ext}}"> 			Initialization  </a></li>
+  <li><a href="/admin/{{action}}/mappings{{url_ext}}"> 					Mappings        </a></li>
+  <li><a href="/admin/{{action}}/content{{url_ext}}"> 					Content			</a></li>
+  <li><a href="/admin/{{action}}/preview{{url_ext}}"> 					Preview			</a></li>
+  <li  class="active"><a href="/admin/{{action}}/submit{{url_ext}}"> 	Submit			</a></li>
+</ul>
+</div>
+
+
+
+
+<div class="container">
+	<br>
+	<div class="jumbotron">
+		<h2> Please verify thoroughly before submitting the procedure</h2>
+		<p>This procedure will have to approved by the reviewer you chose in the initialization step</p>
+		<p><a class="btn btn-primary btn-lg" ng-click="submitDraft()" role="button">	Submit for approval </a></p>
+	</div>
+
+	<br>
+
+	<div class="alert alert-danger" ng-show="showSubmitError">
+		<table  class="table">
+			<thead> <tr> <th> Errors </th> </tr> </thead>
+			<tr ng-repeat='error in errors'>
+				<td> {{error}}</td>
+			</tr>
+		</table>
+	</div>
+</div>

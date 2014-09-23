@@ -1,6 +1,6 @@
 
 <h2 class="text-center"> {{heading}}</h2>
-
+<div>
 <form ng-submit="procedureSelected()" role="form">
 	<div class="form-group">
 		<label for="name">Select a procedure from the database</label>
@@ -33,8 +33,15 @@
 		</ul>
 	</div>
 
+	<div ng-show="showMsgLock" class="alert alert-danger col-xs-6">
+			Procedure has been locked for an update by {{locker}}. <br>
+			Consult the draft procedures section.
+		
+	</div>
 
-	<div ng-show="showMsgFail" class="alert alert-danger">
+
+	<div ng-show="showMsgFail" class="alert alert-danger col-xs-6">
 		Procedure could not be removed from server
 	</div>
 </form>
+</div>

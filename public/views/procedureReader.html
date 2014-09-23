@@ -8,11 +8,11 @@
 	<br>
 	<div id="reader" style="border: 1px solid #C0C0C0;padding:10px;border-width:thick;border-style: groove;">
 		
-			<h2 class="text-center"> {{procedure.pid}}&nbsp;&nbsp;{{procedure.versions[procedure.baseline].pname}} </h2> 
+			<h2 class="text-center"> {{procedure.pid}}&nbsp;&nbsp;{{procedure.pname}} </h2> 
 			<br>
-			<h4 class="text-center">  Version : {{procedure.versions[procedure.baseline].nversion}} </h4>
+			<h4 class="text-center">  Version : {{procedure.version}} </h4>
 			<br>
-			<div class="lead" ng-bind-html="procedure.versions[procedure.baseline].content"></div>
+			<div autoscroll class="lead" ng-bind-html="procedure.data.content"></div>
 			
 	</div>
 </div>

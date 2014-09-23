@@ -53,7 +53,7 @@ isValidProcedure = function (procedure, $http)
 	return isValid;
 }
 
-procedureCRUDCtrlModule.controller('procedureCRUDController', function($scope, $http, $location, $routeParams, procedureDefaultInitializer, procedureDBLoader, adminListLoader, $window) {
+procedureCRUDCtrlModule.controller('procedureCRUDController', function($scope, $http, $location, $routeParams, emptyDraft, procedureDBLoader, adminListLoader, $window) {
 
 	console.log('enterereed')
 	console.log($routeParams.id)
@@ -84,8 +84,9 @@ procedureCRUDCtrlModule.controller('procedureCRUDController', function($scope, $
 		$scope.edit = false
 		$scope.url_extension = ''
 		$scope.procedure = procedureDefaultInitializer;
+		console.log($scope.procedure)
 		procedureDefaultInitializer.orig_baseline = procedureDefaultInitializer.baseline
-		console.log($scope.procedure.versions[$scope.procedure.baseline].global)
+	//	console.log($scope.procedure.versions[$scope.procedure.baseline].global)
 	}
 	
 	syncModel = function() {

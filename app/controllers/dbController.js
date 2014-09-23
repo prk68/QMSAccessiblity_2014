@@ -1,350 +1,490 @@
-var elasticsearch = require('elasticsearch');
-var procedureModel = require("../models/procedure").procedureModel;
+
+/*************************************************************************************************** Include the collections *******************/
+var mongoose = require('mongoose')
+var indexModel = require("../models/procedure").indexModel;
+var artifactModel = require("../models/procedure").artifactModel;
 var notificationModel = require("../models/procedure").notificationModel;
+
+var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({  host: 'localhost:9200',  log: 'trace'});
+
 var S = require('string')
 
-var addProcedureToDataBase = function(request, response)
-{
-	var newProcedure = new procedureModel(request.body.procedure);
-	newProcedure.save(function (err) { 
-		if (err) 
-			response.send(501, 'could not be added in the db'); 
+/**************************************************************************************************************************************/
 
-		else 
+var procedureExists = function(request, response){
+
+	if(!request.params.id)
+	{
+		response.status(500).send();
+		return;
+	}
+
+	indexModel.count({pid: request.params.id}, function(err, count){
+		if(!err)
 		{
-			console.log("Added new procedure : " + newProcedure.pid);
+			if(count > 0)
+				response.send({exists:true})
+			else
+				response.send({exists:false})
+		}
+		else
+			response.status(500).send()
+	})
+}
 
-			// Add content onto elastic search db
-			console.log("Now adding content onto elastic db : " + newProcedure.pid);
-			client.index({
-				index: 'procedurecontent',
-				type: 'String',
-				id: newProcedure.pid,
-				body: {
+var draftExists = function(request, response){
+
+	if(!request.params.id)
+	{
+		response.status(500).send();
+		return;
+	}
+	
+	artifactModel.findOne({pid: request.params.id, in_draft:true}, function(err, result){
+		if(!err)
+		{
+			if(result)
+				response.send({locked:true, locker:result.metaData.owner})
+			else
+				response.send({locked:false})
+		}
+		else
+			response.status(500).send()
+	})
+}
+
+
+var procedureorDraftExists = function(request, response){
+
+	if(!request.params.id)
+	{
+		response.status(500).send();
+		return;
+	}
+
+	artifactModel.count({pid: request.params.id}, function(err, count){
+		if(!err)
+		{
+			if(count > 0)
+				response.send({exists:true})
+			else
+				response.send({exists:false})
+		}		
+	})
+}
+
+var submitDraftProcedure = function(request, response){
+
+	var newDraft = new artifactModel();
+	console.log(request.body.draft_type)
+	newDraft.pid = request.body.procedure.pid
+	newDraft.pname =  request.body.procedure.pname
+	newDraft.version = request.body.procedure.version
+	newDraft.date_of_modification = new Date()
+	newDraft.mappings = request.body.procedure.mappings
+	newDraft.metaData = request.body.procedure.metaData
+	newDraft.data = request.body.procedure.data
+	newDraft.in_draft = true
+	newDraft.draft_type = request.body.draft_type
+	newDraft.rejections =  []
+	newDraft.rejected = false
+	
+	newDraft.save(function (err) { 
+		if (err) 
+			response.send(501, 'draft ' + newDraft.pid + 'could not be saved'); 
+		else
+			response.send('ok');
+	})
+}
+
+var updateDraftProcedure = function(request, response){
+
+	artifactModel.findOneAndUpdate({pid: request.body.procedure.pid, in_draft:true}, 
+										{
+											version : request.body.procedure.version,
+											date_of_modification : new Date(),
+											mappings : request.body.procedure.mappings,
+											metaData : request.body.procedure.metaData,
+											data : request.body.procedure.data,
+											rejected: false
+										}, function(err, result){
+		if (err && newDraft) 
+			response.send(501, 'draft ' + newDraft.pid + 'could not be updated'); 
+		else
+			response.send('ok')
+	})
+}
+
+var getActiveVersionNumber = function(request, response){
+
+	indexModel.findOne({pid:request.params.id, trashed: false}, function(err, result)
+	{
+		if(!err && result)
+			response.send({baseline:result.active_version})
+		else
+			response.status(500).send()
+	})	
+}
+
+
+var getNonActiveVersion = function(request, response){
+
+	artifactModel.findOne({pid:request.query.id, version:request.query.rev}, function(err, result)
+	{
+		if(!err)
+			response.send(result)
+		else
+			response.status(500).send()
+	})	
+}
+
+
+
+var getVersionIds = function(request, response){
+
+	artifactModel.find({pid: request.params.id, in_draft:false}, 'version date_of_modification', function(err, result){
+		if(!err)
+		{
+			var procVersions = []
+			var procModifiedDates = []
+			for(i=0; i<result.length; ++i)
+			{
+				procVersions.push(result[i].version)
+				procModifiedDates.push(result[i].date_of_modification)
+			}
+			response.send({versions:procVersions, dates:procModifiedDates})
+		}	
+		else
+			response.status(500).send({versions:[]})
+	})	
+}
+
+var getAllDrafts = function(response){
+
+	artifactModel.find({in_draft:true}, 'pid pname version date_of_modification metaData draft_type rejected', function(err, drafts){
+		if(!err)
+			response.send(drafts)
+		else
+			response.status(500).send({})
+	})
+}
+
+var getDraft = function(request, response){
+	
+	artifactModel.findOne({pid: request.params.id, in_draft:true}, function(err, draft){
+		if(!err)
+			response.send(draft)
+		else
+			response.status(500).send({})
+	})
+}
+
+var approveDraft = function(request, response){
+	
+	artifactModel.findOneAndUpdate({pid: request.body.pid, in_draft:true}, {in_draft: false, rejected:false, remarks:[]}, function(err, procedure){
+		if(err)
+			response.status(500).send()
+		else
+		{
+			var curDate = new Date()
+			indexModel.update({pid:procedure.pid, pname: procedure.pname}, {trashed:false, date_of_modification: curDate, active_version:procedure.version}, {upsert:true},
+				function(err){
+					if(err)
+						response.status(500).send()
+					else
+					{
+						var notifType = (procedure.draft_type == "new") ? "Created" : "Edited"
+				
+						var newNotification = new notificationModel({
+													pid: procedure.pid,
+													pname: procedure.pname,
+													type: notifType,
+													author: procedure.metaData.owner,
+													reviewer: procedure.metaData.reviewer,
+													date:  curDate,
+													comments: procedure.metaData.comments,
+													version: procedure.version})
+
+						newNotification.save(function(err){
+							if(err)
+								response.status(500).send()
+							else
+							{
+								client.index({
+									index: 'procedurecontent',
+									type: 'String',
+									id: procedure.pid,
+									body: {							
+										name: procedure.pname,
+										content : S(procedure.data.content).stripTags().s
+									 }
+									}, 
+									function(err)
+									{
+										if(!err)
+										{
+											client.index({
+												index: 'procedurecontenthtml',
+												type: 'String',
+												id: procedure.pid,
+												body: {							
+													name: procedure.pname,
+													content : S(procedure.data.content).s
+												 }
+												},function(err){
+													if(!err)
+														response.send('ok');
+													else
+														response.status(500).send()
+												})
+										}
+										else
+											response.send('ok')
+								})								
+							}										
+						})						
+					}						
+			})
+		}
+	})
+}
+
+
+var getAllProcedures = function(response){
+
+	indexModel.find({trashed:false}, function(err, procedure){
+	
+		if(!err)
+			response.send(procedure)
+		else
+			response.status(500).send({})
+	})
+}
+
+var getProcedure = function(request, response){
+
+	indexModel.findOne({pid: request.params.id, trashed:false}, 'active_version', function(err, result){
+
+		if(err)
+			response.status(500).send()
+		else{
+			if(result)
+			{
+				artifactModel.findOne({pid: request.params.id, version:result.active_version, in_draft:false}, function(err, procedure){
 					
-					name: newProcedure.versions[newProcedure.baseline].pname,
-				    content : S(newProcedure.versions[newProcedure.baseline].content).stripTags().s
-				 }
-				}, 
-				function(err){
 					if(!err)
-						console.log("Finished adding content onto elastic db : " + newProcedure.pid);
-				}
-			)
+						response.send(procedure)
+					else
+						response.status(500).send({})
+				})
+			}
+		}
+	})
+}
 
-			client.index({
-				index: 'procedurecontenthtml',
-				type: 'String',
-				id: newProcedure.pid,
-				body: {
-					name: newProcedure.versions[newProcedure.baseline].pname,
-				    content : newProcedure.versions[newProcedure.baseline].content
-				 }
-				}, 
-				function(err){
-					if(!err)
-						console.log("Finished adding content onto elastic db html: " + newProcedure.pid);
-				}
-			)
 
-			//Add a entry in the notification database
-			var newNotification = new notificationModel();
-			newNotification.pid = newProcedure.pid
-			newNotification.pname = newProcedure.versions[newProcedure.baseline].pname
-			newNotification.type = "created"
-			newNotification.author = newProcedure.versions[newProcedure.baseline].owner
-			newNotification.date = new Date()
-			newNotification.reviewer = newProcedure.versions[newProcedure.baseline].reviewer
-			newNotification.old_version = -1
-			newNotification.new_version = newProcedure.versions[newProcedure.baseline].nversion		
-			newNotification.comments = newProcedure.versions[newProcedure.baseline].comments
+var discardDraftProcedure = function(request, response){
+
+	artifactModel.remove({pid: request.body.pid, in_draft:true}, function (err) { 
+		if (err) 
+			response.send(501, 'draft procedure could not be discarded'); 
+		else
+			response.send('ok');
+	})
+}
+
+
+var rejectDraftProcedure = function(request, response){
+
+	console.log(request.body.remarks)
+
+	artifactModel.update({pid: request.body.pid, in_draft:true}, {$push: {rejections:request.body.remarks}, rejected:true}, function (err) { 
+		console.log(err)
+		if (err) 
+			response.send(501, 'draft procedure could not be discarded'); 
+		else
+			response.send('ok');
+	})
+}
+
+
+var removeProcedure = function(request, response){
+	var curDate = new Date()
+	indexModel.findOneAndUpdate({pid: request.body.pid}, {trashed: true, date_of_modification: curDate}, function (err, procedure) { 
+		console.log(err)
+		if (err) 
+			response.send(501, 'procedure could not be remove'); 
+		else
+		{
+			var newNotification = new notificationModel({
+									pid: procedure.pid,
+									pname: procedure.pname,
+									type: "Removed",
+									author: request.body.owner,
+									date:  curDate,
+									comments: request.body.comments
+								})
 
 			newNotification.save(function(err){
-			if(err)
-				response.send(501, 'could not be added in the db'); 
-			else
-				response.send('ok')
-
-			})
-		}
-	});
-}
-
-
-
-var updateInDB = function(request, response)	
-{
-	var sentProcedure = request.body.procedure
-
-	procedureModel.update({pid: sentProcedure.pid}, {baseline: sentProcedure.baseline, $push: {versions:sentProcedure.versions[sentProcedure.baseline]}},{upsert:true},function(err){
-        if(err)
-            console.log(err);
-        else
-        {
-            console.log("Updated procedure : " + sentProcedure.pid);
-        
-            procedureModel.find({pid: sentProcedure.pid}, function(err, result){
-           		if(!err)
-            	{
-            		client.update({
-						index: 'procedurecontent',
-						type: 'String',
-						id: sentProcedure.pid,
-						body: {							
-							name: sentProcedure.versions[sentProcedure.baseline].pname,
-						    content : S(sentProcedure.versions[sentProcedure.baseline].content).stripTags().s
-						 }
-						}, 
-						function(err){
-							if(!err)
-								console.log("Finished adding content onto elastic db : " + sentProcedure.pid);
-					})
-
-					client.update({
-						index: 'procedurecontenthtml',
-						type: 'String',
-						id: sentProcedure.pid,
-						body: {							
-							name: sentProcedure.versions[sentProcedure.baseline].pname,
-						    content : sentProcedure.versions[sentProcedure.baseline].content
-						 }
-						}, 
-						function(err){
-							if(!err)
-								console.log("Finished adding content onto elastic db html: " + sentProcedure.pid);
-					})
-            		  		
-            	    //Add a entry in the notification database
-					var newNotification = new notificationModel();
-					newNotification.pid = sentProcedure.pid
-					newNotification.pname = sentProcedure.versions[sentProcedure.orig_baseline].pname
-					newNotification.type = "updated"
-					newNotification.date = new Date()
-					newNotification.author = sentProcedure.versions[sentProcedure.orig_baseline].owner
-					newNotification.reviewer = sentProcedure.versions[sentProcedure.orig_baseline].reviewer
-					newNotification.old_version = sentProcedure.versions[sentProcedure.orig_baseline].nversion
-					newNotification.new_version = sentProcedure.versions[sentProcedure.baseline].nversion		
-					newNotification.comments = sentProcedure.versions[sentProcedure.baseline].comments
-					newNotification.save(function(err){
-					if(err)
-						response.send(501, 'could not be added in the db'); 
-					else
-						response.send('ok')
-					})
-				}
-			})
-        }
-	});	
-}
-
-
-
-			
-var getAllProcedures = function(res)
-{	
-	procedureModel.find({}, function(err, procedures) 
-	{
-		if (!err) 
-		{
-			results = []
-			for(i=0; i<procedures.length; ++i)
-				if(!procedures[i].trashed)
-					results.push({pid:procedures[i].pid, pname: procedures[i].versions[procedures[i].baseline].pname, nversion:procedures[i].versions[procedures[i].baseline].nversion,
-					 date_of_modification:procedures[i].versions[procedures[i].baseline].date_of_modification})
-			
-			res.send(results);			
-		}
-
-		else 
-		{
-			res.status(500).send('problem with database')
-			console.log(err);
-		}
-	});
-}
-
-var getTrashedProcedures = function(res)
-{	
-	procedureModel.find({}, function(err, procedures) 
-	{
-		if (!err) 
-		{
-			results = []
-			//console.log(procedures)
-			for(i=0; i<procedures.length; ++i)
-				if(procedures[i].trashed)
-					results.push({pid:procedures[i].pid, pname: procedures[i].versions[procedures[i].baseline].pname, nversion:procedures[i].versions[procedures[i].baseline].nversion,
-					 date_of_modification:procedures[i].versions[procedures[i].baseline].date_of_modification})
-			
-			//console.log(results)
-			res.send(results);			
-		}
-
-		else 
-		{
-			res.status(500).send('problem with database')
-			console.log(err);
-		}
-	});
-}
-
-var getProcedure =  function(id, res)
-{
-	console.log("getProcedureBody")
-	console.log(id)
-	procedureModel.find({pid: id}, function(err, result) {
-		if (!err) {
-			if(result.length == 0 || result[0].trashed)
-				res.status(400).send("Does not exist")
-			else
-				res.send(result[0])
-			console.log("sucess");
-		} else {
-			console.log(err);
-		}
-	});
-}			
-
-var getTrashedProcedure =  function(id, res)
-{
-	console.log("getProcedureBody")
-	console.log(id)
-	procedureModel.find({pid: id}, function(err, result) {
-		if (!err) {
-			console.log(result.length)
-			if(result.length == 0 )
-				res.status(400).send("Does not exist")
-			else
-				res.send(result[0])
-			console.log("sucess");
-		} else {
-			console.log(err);
-		}
-	});
-}
-
-var deleteProcedure = function(request, response){
-	console.log('delete procedure')
-	console.log( request.body.pid)
-
-	/*procedureModel.remove({}, function(err) { 
-   		console.log('collection removed') 
-		response.send('ok')
-	});*/
-
-	if(!request.body.pid)
-		response.status(400).send('bad pid')
-	else
-	{
-		procedureModel.update({pid: request.body.pid}, {trashed: true},{upsert:true},function(err){
-	        if(err){
-	            console.log(err);
-	        	response.status(500).send('could not remove the procedure')
-	        }
-	        else
-	        {
-	            console.log("Trashed procedure : " + request.body.pid);
-	           
-	            //Add a entry in the notification database
-				var newNotification = new notificationModel();
-				newNotification.pid = request.body.pid
-				newNotification.pname = request.body.pname
-				newNotification.date = new Date()
-				newNotification.type = "removed"
-				newNotification.author = request.body.owner
-				newNotification.comments = request.body.comments
-
-				newNotification.save(function(err){
-					if(err)
-						response.send(501, 'could not be added in the activity db'); 
-				
+				if(err)
+					response.status(500).send()
+				else
 					response.send('ok')
-				})
-	        }
-		});
-	}
+			})						
+		}
+	})
 }
 
 
 var restoreProcedure = function(request, response){
 
-	if(!request.body.pid)
-		response.status(400).send('bad pid')
-	else
-	{
-		procedureModel.update({pid: request.body.pid}, {trashed: false},{upsert:true},function(err){
-	        if(err){
-	            console.log(err);
-	        	response.status(500).send('could not restore the procedure')
-	        }
-	        else
-	        {
-	            console.log("restored procedure : " + request.body.pid);        
-	             //Add a entry in the notification database
-				var newNotification = new notificationModel();
-				newNotification.pid = request.body.pid
-				newNotification.pname = request.body.pname
-				newNotification.date = new Date()
-				newNotification.type = "restored"
-				newNotification.author = request.body.owner
-				newNotification.comments = request.body.comments
-				
-				newNotification.save(function(err){
+	var curDate = new Date()
+	indexModel.findOneAndUpdate({pid: request.body.pid}, {trashed: false, date_of_modification: curDate}, function (err, procedure) { 
+		console.log(err)
+		if (err) 
+			response.send(501, 'procedure could not be restored'); 
+		else
+		{
+			var newNotification = new notificationModel({
+									pid: procedure.pid,
+									pname: procedure.pname,
+									type: "Restored",
+									author: request.body.owner,
+									date:  curDate,
+									comments: request.body.comments
+								})
+
+			newNotification.save(function(err){
 				if(err)
-					response.send(501, 'could not be added in the db'); 
+					response.status(500).send()
 				else
+				{
 					response.send('ok')
-				})
-
-
-	        }
-		});
-	}	
+				}							
+			})						
+		}			
+	})
 }
-
 
 
 var revertProcedure = function(request, response){
 
-	if(!request.body.pid)
-		response.status(400).send('bad pid')
-	else
-	{
-		console.log(request.body.baseline)
-		procedureModel.update({pid: request.body.pid}, {baseline: request.body.baseline},{upsert:true},function(err){
-	        if(err){
-	            console.log(err);
-	        	response.status(500).send('could not restore the procedure')
-	        }
-	        else{
-	            console.log("restored procedure : " + request.body.pid);        
-	           //Add a entry in the notification database
-				var newNotification = new notificationModel();
-				newNotification.pid = request.body.pid
-				newNotification.pname = request.body.pname
-				newNotification.type = "reverted"
-				newNotification.date = new Date()
-				newNotification.author = request.body.owner
-				newNotification.old_version = request.body.old_version
-				newNotification.new_version = request.body.new_version		
-				newNotification.comments = request.body.comments
-				
-				newNotification.save(function(err){
+	var curDate = new Date()
+	indexModel.findOneAndUpdate({pid: request.body.pid}, {active_version:request.body.version, date_of_modification: curDate}, function (err, procedure) { 
+		console.log(err)
+		if (err) 
+			response.send(501, 'procedure could not be reverted'); 
+		else
+		{
+			artifactModel.findOne({pid: request.body.pid, version:request.body.version}, function(err, procedure)
+			{
+
 				if(err)
-					response.send(501, 'could not be added in the db'); 
+					response.status(500).send()
 				else
-					response.send('ok')
-				})
-	        }
-		});
-	}	
+				{
+					var newNotification = new notificationModel({
+											pid: procedure.pid,
+											pname: procedure.pname,
+											type: "Reverted",
+											author: request.body.owner,
+											version: request.body.version,
+											date:  curDate,
+											comments: request.body.comments
+										})
+
+					newNotification.save(function(err){
+						if(err)
+							response.status(500).send()
+						else
+						{
+							client.index({
+								index: 'procedurecontent',
+								type: 'String',
+								id: procedure.pid,
+								body: {							
+									name: procedure.pname,
+									content : S(procedure.data.content).stripTags().s
+								}
+							},function(err)
+							  {
+								if(!err)
+								{
+									client.index({
+										index: 'procedurecontenthtml',
+										type: 'String',
+										id: procedure.pid,
+										body: {							
+											name: procedure.pname,
+											content : S(procedure.data.content).s
+										}
+									},function(err){
+										if(!err)
+											response.send('ok');
+										else
+											response.status(500).send()
+									})
+								}
+								else
+									response.status(500).send()
+							})
+						}
+					})
+				}	
+			})						
+		}
+	})
 }
+
+var getAllTrashProcedures = function(response){
+	
+	indexModel.find({trashed:true}, function(err, procedure){
+	
+		if(!err)
+			response.send(procedure)
+		else
+			response.status(500).send({})
+	})
+}
+
+var getTrashProcedure = function(request, response){
+
+	indexModel.findOne({pid: request.params.id, trashed:true}, 'active_version', function(err, result){
+
+		if(err || !result)
+			response.status(500).send()
+		else{
+			
+			artifactModel.findOne({pid: request.params.id, version:result.active_version, in_draft:false}, function(err, procedure){
+				
+				if(!err)
+					response.send(procedure)
+				else
+					response.status(500).send({})
+			})
+		}
+	})
+}
+
+var getActivityLog = function(request, response){
+
+	notificationModel.find({}, function(err, result){
+
+		if(err || !result)
+			response.status(500).send()
+		else
+			response.send(result)
+	})	
+}
+
 
 var search = function(request, response){
 
 	client.search({
 		  index: 'procedurecontent',
+		  active: true,
+		  trashed: false,
 		  body: {
 		    query: {
 		      match: {
@@ -367,26 +507,8 @@ var search = function(request, response){
 				obj.push({id:result.hits.hits[i]._id, name:result.hits.hits[i]._source.name,  snippets: result.hits.hits[i].highlight.content})
 
 			}
-
-
 		  	response.send(obj)
-	})
-	
-}
-
-
-
-var getActivityLog =  function(req, res)
-{
-	console.log("activityLog")
-	notificationModel.find({}, function(err, result) {
-		if (!err) {
-			res.status(200).send(result)
-		} else {
-			console.log(err);
-			res.status(500).send("cannot deliver change log")
-		}
-	});
+	})	
 }
 
 
@@ -397,11 +519,10 @@ var resolveLinks = function(request, response)
 		  body: {
 		    query: {
 		      match: {
-		        content: '/'+request.query.id
+		        content: request.query.id
 		      }
 		    },
-		  
-		    highlight: {
+		  highlight: {
 		    	fields: {"content": {"number_of_fragments": 2}}
 		    }
 
@@ -422,16 +543,42 @@ var resolveLinks = function(request, response)
 	})
 }
 
-
-exports.getProcedure =  getProcedure;
-exports.getTrashedProcedure =  getTrashedProcedure;
-exports.getAllProcedures = getAllProcedures;
-exports.getTrashedProcedures = getTrashedProcedures;
-exports.addToDB = addProcedureToDataBase;
-exports.deleteProcedure  = deleteProcedure
-exports.restoreProcedure  = restoreProcedure
-exports.updateInDB = updateInDB
+exports.procedureExists = procedureExists
+exports.draftExists = draftExists
+exports.procedureorDraftExists = procedureorDraftExists
+exports.submitDraftProcedure = submitDraftProcedure
+exports.updateDraftProcedure = updateDraftProcedure
+exports.getVersionIds = getVersionIds
+exports.getAllDrafts = getAllDrafts
+exports.getAllProcedures = getAllProcedures
+exports.getDraft = getDraft
+exports.getProcedure = getProcedure
+exports.approveDraft = approveDraft
+exports.rejectDraftProcedure = rejectDraftProcedure
+exports.discardDraftProcedure = discardDraftProcedure
+exports.removeProcedure = removeProcedure
+exports.restoreProcedure = restoreProcedure
 exports.revertProcedure = revertProcedure
-exports.search = search
+exports.getTrashProcedure = getTrashProcedure
+exports.getAllTrashProcedures = getAllTrashProcedures
+exports.getActiveVersionNumber = getActiveVersionNumber
+exports.getNonActiveVersion = getNonActiveVersion
 exports.getActivityLog = getActivityLog
+exports.search = search
 exports.resolveLinks = resolveLinks
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

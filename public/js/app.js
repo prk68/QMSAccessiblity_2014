@@ -1,5 +1,23 @@
 var mod = angular.module('qmsAccessibility', ['ngRoute', 'appRoutes', 'ui.bootstrap', 'procedureListCtrlModule', 'procedureReaderCtrlModule', 'ngSanitize', 'activityLogModule','searchCtrlModule', 'ngResource', 'dBProcedureServiceModule']);
 
+/*
+This directive allows us to pass a function in on an enter key to do what we want.
+ */
+mod.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.ngEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+});
+
+
 mod.controller('indexController', function($scope, $location){
 
 	$scope.searchQuery = ""
@@ -38,4 +56,5 @@ mod.factory('activityLogLoader', ['activityLogResource', '$q', '$route' , functi
 		return delay.promise
 	}
 }]);
+
 

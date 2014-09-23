@@ -24,6 +24,11 @@ procedureListCtrlModule.controller('procedureListController', function($scope, $
     $scope.openedU = true;
   };
 
+  $scope.showDateFilterForm = false
+  $scope.showDateFilter = function(){
+  	$scope.showDateFilterForm = !$scope.showDateFilterForm
+  }
+
   $scope.filterByDate = function(){
 
   	for(i=0; i<$scope.results.length; ++i)

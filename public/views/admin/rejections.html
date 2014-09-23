@@ -1,15 +1,16 @@
+
 <div>
 <ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="/admin/approvals">	Pending approvals    </a></li>
-  <li ><a href="/admin/rejected"> 					Pending rework       </a></li>
+  <li ><a href="/admin/approvals">					Pending approvals    </a></li>
+  <li class="active"><a href="/admin/rejected"> 	Pending rework       </a></li>
  </ul>
 </div>
 
 
 <div class = "col-xs-8">
-	
+
 	<br>
-		<form class="form-inline" role="form">
+		<form class="form-inline" role="form" ng-submit="filter()" >
 			<div class="form-group">
 			
 					<label  for="id">Author</label>
@@ -38,13 +39,11 @@
 		</form>
 	<br><br>
 
-	
 	<table  class="table">
 
-		<tr ng-repeat='result in results' ng-show="result.show && !result.rejected">
+		<tr ng-repeat='result in results' ng-show="result.show && result.rejected">
 			<td ng-show="result.draft_type =='new'"> <span class="glyphicon glyphicon-plus"> </td>
 			<td ng-show="result.draft_type =='edit'"> <span class="glyphicon glyphicon-edit"> </td>
-			
 			<td> Id <b>{{result.pid}}</b>, Title <b>{{result.pname}}</b>, Author <b>{{result.metaData.owner}}</b>, Reviewer <b>{{result.metaData.reviewer}}</b>, Submitted on <b>{{result.date_of_modification|date:'short'}}</b>
 			<td> <a href="/admin/draft/reader/?id={{result.pid}}"> <span class="glyphicon glyphicon-circle-arrow-right"> </span> </a> </td>
 		</tr>

@@ -1,5 +1,5 @@
 angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider, $location) {
-
+	console.log($routeProvider)
 	$routeProvider
 	
 		.when('/procedure/library', {
@@ -13,7 +13,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 		})
 
 		.when('/activity/log', {
-			templateUrl: '../views/activitylog.html',
+			templateUrl: '../views/admin/activitylog.html',
 			controller: 'activityLogController',
 			resolve: {
 				activityLogLoader: function(activityLogLoader) {
@@ -23,7 +23,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 		})
 
 		.when('/statement', {
-			templateUrl: '../views/construction.html',
+			templateUrl: '../views/anchor.html',
 		})
 
 		.when('/answers', {

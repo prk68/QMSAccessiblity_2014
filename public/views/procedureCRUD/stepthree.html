@@ -1,35 +1,29 @@
 <div>
-	<h2> Step 3/3. Content </h2>
-	<br>
-	
-	<ul class="pager">
-		<li class="previous"><a href="/admin/procedurecrud/step2/{{url_extension}}">&larr; Mappings </a></li>
-	</ul>
+<ul class="nav nav-tabs" role="tablist">
+  <li><a href="/admin/{{action}}/initialization{{url_ext}}"> 			Initialization      </a></li>
+  <li><a href="/admin/{{action}}/mappings{{url_ext}}"> 					Mappings        </a></li>
+  <li class="active"><a href="/admin/{{action}}/content{{url_ext}}"> 	Content			</a></li>
+  <li ><a href="/admin/{{action}}/preview{{url_ext}}"> 					Preview			</a></li>
+   <li><a href="/admin/{{action}}/submit{{url_ext}}"> 					Submit			</a></li>
+</ul>
+</div>
+
+
+
+<div>
 	
 	<form role="form">
+
+		<br>
+
 		<div class="form-group">
 			<label for="url">Enter the content relating to the QMS procedure  </label>
 			<br>
 			<div>
-                <textarea ckeditor="editorOptions" name="editor" ng-model="procedure.versions[procedure.baseline].content" ng-change="save()"></textarea>
+                <textarea ckeditor="editorOptions" name="editor" ng-model="procedure.draft_version.data.content" ng-change="save()"></textarea>
             </div>			
 		</div>
 		
-		
-	<div class="btn-group">
-  		<a href="#" type="button" class="btn btn-default" ng-click="preview()">Preview</a>
-  		<a href="#" type="submit" class="btn btn-primary" ng-click="uploadProcedure()">Submit for approval</a>
-	</div>
-
 	</form>
-
-	<div class="alert alert-danger" ng-show="showSubmitError">
-		<table  class="table">
-			<thead> <tr> <th> Errors </th> </tr> </thead>
-			<tr ng-repeat='error in errors'>
-				<td> {{error}}</td>
-			</tr>
-		</table>
-	</div>
 	
 </div>

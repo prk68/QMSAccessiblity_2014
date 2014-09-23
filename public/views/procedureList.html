@@ -1,9 +1,9 @@
 <div>
 
-<h2>Procedure Library</h2>
+<h2> <b> Procedure Library </b> </h2>
 <br>
 
-<form class="form-inline" role="form" ng-submit="filterByDate()" >
+<form ng-show="showDateFilterForm" class="form-inline" role="form" ng-submit="filterByDate()" >
 	<div class="form-group">
 		<p class="input-group input-group-lg">
               <input type="date" class="form-control" datepicker-popup="{{format}}" ng-model="ldt" is-open="openedL" datepicker-options="dateOptions">
@@ -31,14 +31,14 @@
 			<th> Procedure ID </th>
 			<th> Procedure Name </th>
 			<th> Version </th>
-			<th> Modified Date </th>
+			<th> Modified Date  <span ng-click="showDateFilter()"class="glyphicon glyphicon-filter"> </span> </th>
 		</tr>
 	</thead>
 
 	<tr ng-repeat="result in results" ng-show="result.show">
 		<td> {{result.pid }}</td>
 		<td> <a href="/reader/{{result.pid}}"> {{result.pname}} </a></td>
-		<td> {{result.nversion}} </td>
+		<td> {{result.active_version}} </td>
 		<td> {{result.date_of_modification | date:'shortDate' }}</td>
 	</tr>
 </table>

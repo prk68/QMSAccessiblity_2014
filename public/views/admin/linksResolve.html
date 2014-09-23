@@ -1,18 +1,29 @@
 
 <div>
 
-	<div ng-show="onDelete" class="alert alert-success">
-		Procedure {{pid}} has been disabled for public viewing
+	<div ng-show="onDelete" class="jumbotron text-center">
+		<h2 class="text-success">The draft procedure has been successfully added on the QMS Server</h2>
+		<h3> Please take care to ensure that you resolve all the dead links referring to this procedure </h3>
 	</div>
+
 	<br>
-	<h3 class="text-center"> Procedures referring to {{pid}}  </h3>
-	<br>
-	<div class=" alert alert-warning">
-		<table>
-			<tr ng-repeat='hit in hits'><td> <h4> <a href="/reader/{{hit.id}}" target="_blank"> <u> {{hit.id}} : {{hit.name}} </u> </a> <br>
+	
+	
+	<ul>
+		
+		<b> <h3 class="text-center"> <b> Dead links to {{pid}} </b> </h3> </b>
+
+		<div ng-show="hits.length == 0"> 
+			<h2 class="text-center alert alert-success"> None </h2>
+		</div>
+
+		<li ng-repeat='hit in hits'>
+			<div class=" alert alert-warning"> 
+			 <h4> <a href="/reader/{{hit.id}}" target="_blank"> <u> {{hit.id}} : {{hit.name}} </u> </a> <br>
+			 	<i> Snippet</i>
 				<div ng-bind-html="hit.snippets[0]"></div>				
-				<div ng-bind-html="hit.snippets[1]"></div></td>
-			 </tr>
-		</table>
-	</div>
+				<div ng-bind-html="hit.snippets[1]"></div>
+			 </div>
+		</li>
+	</ul>	
 </div>

@@ -2,9 +2,12 @@ var activityLogModule = angular.module('activityLogModule', [])
 
 activityLogModule.controller('activityLogController', function($scope, activityLogLoader){
 	
+
+
 	$scope.results = activityLogLoader
 	for(i=0; i<$scope.results.length; ++i)
 		$scope.results[i].show = true
+	
 	$scope.pids = []
 	$scope.owners = []
 
@@ -21,7 +24,7 @@ activityLogModule.controller('activityLogController', function($scope, activityL
 			$scope.owners.push(activityLogLoader[i].author)
 	}
 
-	$scope.types= ["created", "updated", "removed", "reverted", "restored"]
+	$scope.types= ["Created", "Edited", "Removed", "Reverted", "Restored"]
 	console.log($scope.results)
 
 
@@ -30,11 +33,18 @@ activityLogModule.controller('activityLogController', function($scope, activityL
 		for(i=0; i<$scope.results.length; ++i)
 		{
 			$scope.results[i].show = true
-			if(($scope.selectedType && $scope.results[i].type != $scope.selectedType) || ($scope.selectedPid && $scope.results[i].pid != $scope.selectedPid) || ($scope.selectedOwner && $scope.results[i].author != $scope.selectedOwner) )
+			if( ($scope.selectedPid && $scope.results[i].pid != $scope.selectedPid) || 
+				($scope.selectedOwner && $scope.results[i].author != $scope.selectedOwner) ||
+				($scope.selectedType && $scope.results[i].type != $scope.selectedType) )
 				$scope.results[i].show = false
-
 		}
 
+	}
+
+
+	$scope.showAll = function(){
+		for(i=0; i<$scope.results.length; ++i)
+			$scope.results[i].show = true
 	}
 
 })

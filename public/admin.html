@@ -16,6 +16,7 @@
 <script src="/js/services/defaultProcedure.js"></script>
 <script src="/js/services/dbProcedure.js"></script>
 <script src="/js/services/adminProvider.js"></script>
+<script src="/js/services/validateDraft.js"></script>
 <script src="/js/controllers/admin/newProcedureCtrl.js"></script>
 <script src="/js/controllers/admin/editProcedureSelector.js"></script>
 <script src="/js/controllers/admin/deleteProcedureSelector.js"></script>
@@ -26,6 +27,9 @@
 <script src="/js/controllers/admin/activityLogCtrl.js"></script>
 <script src="/js/controllers/admin/deadLinksCtrl.js"></script>
 <script src="/js/controllers/admin/linksSelectorCtrl.js"></script>
+<script src="/js/controllers/admin/procedureformCtrl.js"></script>
+<script src="/js/controllers/admin/approverejectCtrl.js"></script>
+<script src="/js/controllers/admin/draftReaderCtrl.js"></script>
 <script src="/libs/ckeditor/ckeditor.js"></script>
 <script src="/js/directives/ckeditor/directives.js"></script>
 <link rel="stylesheet" href="/libs/bootstrap/dist/css/bootstrap.css">
@@ -73,19 +77,19 @@
 								
 							<li class=" dropwdown"><a class="dropdown-toggle" data-toggle="dropdown">Actions &nbsp;<span class="glyphicon glyphicon-cog"> <span class="caret"></span> </a>
 								<ul class="dropdown-menu">
-									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/procedurecrud/step1">Add new &nbsp; <span class="glyphicon glyphicon-plus"></a></li>
-									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/edit/selector">Edit existing &nbsp;<span class="glyphicon glyphicon-edit"></a></li>
-									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/delete/selector">Remove &nbsp;<span class="glyphicon glyphicon-remove"></a></li>
-									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/revert/selector">Revert &nbsp;<span class="glyphicon glyphicon-repeat"></a></li>
+									<li><a data-target=".nav-collapse" href="/admin/new/form">Add new &nbsp; <span class="glyphicon glyphicon-plus"></a></li>
+									<li><a data-target=".nav-collapse" href="/admin/edit/selector">Edit existing &nbsp;<span class="glyphicon glyphicon-edit"></a></li>
+									<li><a data-target=".nav-collapse" href="/admin/delete/selector">Remove &nbsp;<span class="glyphicon glyphicon-remove"></a></li>
+									<li><a data-target=".nav-collapse" href="/admin/revert/selector">Revert &nbsp;<span class="glyphicon glyphicon-repeat"></a></li>
 								</ul>
 							</li>
 									
-							<li class=" dropwdown"><a class="dropdown-toggle" data-toggle="dropdown">Review &nbsp;<span class="glyphicon glyphicon-dashboard"> <span class="caret"></span> </a>
+							<li class=" dropwdown"><a  class="dropdown-toggle"data-toggle="dropdown">Review &nbsp;<span class="glyphicon glyphicon-dashboard"> <span class="caret"></span> </a>
 								<ul class="dropdown-menu">
-									<li><a data-toggle="tab" data-target=".nav-collapse" href="#">Pending Approvals &nbsp; <span class="glyphicon glyphicon-adjust"></a></li>
-									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/trash">Trash Can &nbsp;<span class="glyphicon glyphicon-trash"></a></li>
-									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/log">Change Log &nbsp;<span class="glyphicon glyphicon-th"></a></li>
-									<li><a data-toggle="tab" data-target=".nav-collapse" href="/admin/links/selector">Dead links &nbsp;<span class="glyphicon glyphicon-minus"></a></li>
+									<li><a data-target=".nav-collapse" href="/admin/approvals">Draft procedures &nbsp; <span class="glyphicon glyphicon-adjust"></a></li>
+									<li><a data-target=".nav-collapse" href="/admin/trash">Trash can &nbsp;<span class="glyphicon glyphicon-trash"></a></li>
+									<li><a data-target=".nav-collapse" href="/admin/log">Activity log &nbsp;<span class="glyphicon glyphicon-th"></a></li>
+									<li><a data-target=".nav-collapse" href="/admin/links/selector">Dead links &nbsp;<span class="glyphicon glyphicon-minus"></a></li>
 								</ul>
 							</li>
 

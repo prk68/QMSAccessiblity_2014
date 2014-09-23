@@ -81,39 +81,106 @@ module.exports = function(app) {
 	});*/
 	
 
-	
-	app.get('/admin/list', function(req, res) {
-		res.json(adminData);
-	});	
-	
-	app.post('/procedure/add', function(req, res) {
-		dbController.addToDB(req, res);
+	app.get('/exists/:id', function(req, res) {
+		dbController.procedureExists(req, res);
 	});
-	
-	
-	app.post('/procedure/update', function(req, res) {
-		dbController.updateInDB(req, res);		
+
+	app.get('/admin/exists/all/:id', function(req, res) {
+		dbController.procedureorDraftExists(req, res);
+	});
+
+	app.get('/admin/locked/:id', function(req, res) {
+		dbController.draftExists(req, res);
+	});
+
+	app.get('/versions/:id', function(req, res) {
+		dbController.getVersionIds(req, res);
 	});
 
 
+
+ /************************************************************* Draft management **********************************************/
+	app.get('/admin/drafts', function(req, res) {
+		dbController.getAllDrafts(res);
+	});
+
+	app.get('/admin/drafts/:id', function(req, res) {
+		dbController.getDraft(req, res);
+	});
+
+	app.post('/admin/draft/submit', function(req, res) {
+		dbController.submitDraftProcedure(req, res);
+	});
+
+	app.post('/admin/draft/update', function(req, res) {
+		dbController.updateDraftProcedure(req, res);
+	});
+
+	app.post('/admin/approve', function(req, res){
+		dbController.approveDraft(req, res);
+	})
+
+	app.post('/admin/reject', function(req, res){
+		dbController.rejectDraftProcedure(req, res);
+	})
+
+	app.post('/admin/draft/remove', function(req, res){
+		dbController.discardDraftProcedure(req, res);
+	})
+/**************************************************************************************************************************************/
 	app.get('/procedures', function(req, res) {
 		dbController.getAllProcedures(res);
 	});
 
-	app.get('/procedures/trash', function(req, res) {
-		dbController.getTrashedProcedures(res);
+	app.get('/procedures/:id', function(req, res) {
+		dbController.getProcedure(req, res);
+	});
+
+	app.get('/procedure/baseline/:id', function(req, res) {
+		dbController.getActiveVersionNumber(req, res);
+	});
+
+	app.get('/admin/procedure/version', function(req, res) {
+		dbController.getNonActiveVersion(req, res);
+	});
+
+/**************************************************************************************************************************************/
+	
+	app.get('/admin/list', function(req, res) {
+		res.json(adminData);
+	});	
+
+/****************************  Remove, restore and revert actions  ***************************************************************************/
+	
+
+
+	app.get('/admin/procedures/trash', function(req, res) {
+		dbController.getAllTrashProcedures(res);
 	});	
 
 
-	app.get('/procedures/:id', function(req, res) {
-		console.log("hoeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-		dbController.getProcedure(req.params.id, res);
+	app.get('/admin/procedures/trash/:id', function(req, res) {
+		dbController.getTrashProcedure(req, res);
 	});
 
+	
+	app.post('/deleteProcedure', function(req, res) {
+		dbController.removeProcedure(req, res);
+	});
 
-	app.get('/procedures/trash/:id', function(req, res) {
-		console.log("hoeeeeeeehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
-		dbController.getTrashedProcedure(req.params.id, res);
+	app.post('/admin/revert', function(req, res) {
+		dbController.revertProcedure(req, res);
+	});
+
+	app.post('/admin/restore', function(req, res) {
+		dbController.restoreProcedure(req, res);
+	});
+
+	
+	/***********************************************************************************************************************************/
+
+	app.get('/activity', function(req, res) {
+		dbController.getActivityLog(req, res);
 	});
 
 	app.get('/search', function(req, res) {
@@ -125,24 +192,6 @@ module.exports = function(app) {
 		console.log("search")
 		dbController.resolveLinks(req, res);
 	});
-
-
-	app.post('/deleteProcedure', function(req, res) {
-		dbController.deleteProcedure(req, res);
-	});
-
-	app.post('/admin/revert', function(req, res) {
-		dbController.revertProcedure(req, res);
-	});
-
-	app.post('/admin/restore', function(req, res) {
-		dbController.restoreProcedure(req, res);
-	});
-
-	app.get('/activity', function(req, res) {
-		dbController.getActivityLog(req, res);
-	});
-
 
 	app.post('/admin/resolve/deadlinks', function(req, res) {
 		dbController.resolveDeadLinks(req, res);

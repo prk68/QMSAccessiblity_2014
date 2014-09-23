@@ -1,43 +1,47 @@
 
 var mongoose = require('mongoose')
 
+/****************************************************************************************************************************************************************************/
 
-var procedureVersion = new mongoose.Schema({
-		
-	pname: 	String,		
-	owner: String, 
-	reviewer: String,
+
+var indexSchema = new mongoose.Schema({
+
+	pid: String,
+	pname: String,
+	active_version: Number,
+	trashed: Boolean,
+	date_of_modification: Date
+})
+
+var indexModel = mongoose.model('index', indexSchema)
+
+/****************************************************************************************************************************************************************************/
+
+var artifactSchema = new mongoose.Schema({
+
+	pid: String,
+	pname: String,
+	version: Number,
 	date_of_modification: Date,
-	comments:			String,		
-			
-	role:	{pfl: Boolean, eng: Boolean, cmz: Boolean, ops: Boolean, sup: Boolean, qlty: Boolean},							 
-	phase:		{incp: Boolean, elb: Boolean, constr: Boolean, beta: Boolean, cmz: Boolean},		
-	center:   {abtc:Boolean, atc:Boolean, brgc:Boolean, htc:Boolean, mptc:Boolean, sntc:Boolean, ptc:Boolean},			
-	questions: [String],				
+	mappings : {
+					role: 		{pfl: Boolean, eng: Boolean, cmz: Boolean, ops: Boolean, ops: Boolean, qlty: Boolean},
+					phase:		{incp: Boolean, elb: Boolean, constr: Boolean, beta: Boolean, cmz: Boolean},		
+					center:     {abtc:Boolean, atc:Boolean, brgc:Boolean, htc:Boolean, mptc:Boolean, sntc:Boolean, ptc:Boolean},	
+					global: 	Boolean,		
+					questions:  [String]
+				},
 
-	global:   Boolean,
-		
-	content:  String,
-	nversion: Number,					
-});
+	metaData : { owner: String, reviewer: String, comments: String},
+	data     : { content: String},
 
+	in_draft: Boolean,
+	draft_type: String, 
+	rejected: Boolean, 
+	rejections: [String]
+})
 
-
-
-var procedureSchema = new mongoose.Schema({
-
-	pid : 	String,
-	trashed :  Boolean,
-	baseline : Number,
-	versions : [procedureVersion],					
-});
-
-var draftProcedureSchema =  new mongoose.Schema({
-	
-	procedure : [procedureSchema],
-	rejections : [String]				
-});
-
+var artifactModel = mongoose.model('artifact', artifactSchema)
+/****************************************************************************************************************************************************************************/
 
 
 
@@ -50,19 +54,13 @@ var notificationSchema = new mongoose.Schema({
 	reviewer: String,
 	date: Date,
 	comments: String,
-	old_version: Number,
-	new_version: Number,
+	version: Number,	
 });
 
+var notificationModel = mongoose.model('notification', notificationSchema)
 
+/****************************************************************************************************************************************************************************/
 
-
-var ProcedureVersion =  mongoose.model('ProcedureVersionSchema', procedureVersion);
-var Procedure = mongoose.model('ProcedureSchema', procedureSchema);
-var notification = mongoose.model('NotificationSchema', notificationSchema);
-var draftProcedure = mongoose.model('draftProcedureSchema', draftProcedureSchema);
-
-exports.procedureModel = Procedure
-exports.procedureVersionModel = ProcedureVersion
-exports.notificationModel = notification
-exports.draftProcedureModel =  draftProcedure
+exports.indexModel = indexModel
+exports.artifactModel = artifactModel
+exports.notificationModel = notificationModel

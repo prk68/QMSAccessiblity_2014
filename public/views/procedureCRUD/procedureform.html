@@ -1,0 +1,220 @@
+<div>
+<ul class="nav nav-tabs" role="tablist">
+  <li ng-class="{ active: isActive('init')}">  	 <a ng-click="step_init()">    Initialization  </a></li>
+  <li ng-class="{ active: isActive('map')}"> 	 <a ng-click="step_map()">     Mappings        </a></li>
+  <li ng-class="{ active: isActive('content')}"> <a ng-click="step_content()"> Content			</a></li>
+  <li ng-class="{ active: isActive('preview')}"> <a ng-click="step_preview()"> Preview			</a></li>
+  <li ng-class="{ active: isActive('submit')}">  <a ng-click="step_submit()">  Submit			</a></li>
+</ul>
+</div>
+
+<div class="col-xs-6" ng-show="step=='init'">
+	<br> 
+	<form role="form">
+
+			<div class="form-group input-group-xs">
+				<label> Procedure ID</label>
+				<input type="text" class="form-control" size="20" minlength="4" maxlength="10"
+				ng-model="procedure.pid" ng-readonly="edit || draft" required>
+			</div>
+		
+			<div class="form-group">
+				<label >Procedure Name</label>
+				<input type="text" class="form-control" minlength="10" maxlength="50"
+				ng-model="procedure.pname" ng-readonly="edit || draft" required>
+			</div>
+
+			<div class="form-group">
+				<label> Procedure Reviewer </label>
+				<select class="form-control" ng-init="defaultLabel" ng-model="procedure.metaData.reviewer" ng-change="updateSelection()">
+					<option ng-repeat="admin in admins">{{admin.alias}}</option>
+				</select>
+			</div>
+
+			<div class="form-group" ng-show="edit">
+				<label for="version"> Original version number </label>
+				<input type="number" class="form-control"
+				ng-model="active_version" ng-readonly="edit">
+			</div>
+
+			<div class="form-group">
+				<label for="version"> Version for this draft </label>
+				<input type="number" class="form-control" id="version"
+				ng-model="procedure.version">
+			</div>
+		
+
+			<div class="form-group ">
+				<label for="name"><strong>Comments </strong></label>
+				<textarea class="form-control" ng-model="procedure.metaData.comments" rows="5" maxlength="200"></textarea>
+			</div>
+		
+	</form>
+</div>
+
+<div class="col-xs-8" ng-show="step=='map'">
+	
+	<form role="form">
+		
+		<br>
+		
+		<label for="roleGroup"><strong>Roles  to which it applies</strong></label>
+		
+		<div class="form-group">
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox1" ng-model="procedure.mappings.role.pfl"> <span>Portfolio </span>
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox2" ng-model="procedure.mappings.role.eng"> <span>Engineering</span>
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox3" ng-model="procedure.mappings.role.cmz"> <span>Commercialization</span>
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox4" ng-model="procedure.mappings.role.ops"> <span>Operations</span>
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox5" ng-model="procedure.mappings.role.sup"> <span>Support</span>
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="roleCheckbox6" ng-model="procedure.mappings.role.qlty"><span> Quality Management</span>
+			</label>			
+		</div>
+		
+		
+		<label for="rupGroup"><strong>RUP Project phases to which it applies</strong></label>
+		
+		<div class="form-group">			
+			<label class="checkbox-inline">
+				<input type="checkbox" id="rupCheckbox1" ng-model="procedure.mappings.phase.incp"> Inception
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="rupCheckbox2" ng-model="procedure.mappings.phase.elb"> Elaboration
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="rupCheckbox3" ng-model="procedure.mappings.phase.constr"> Construction
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="rupCheckbox4" ng-model="procedure.mappings.phase.beta"> Beta
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" id="rupCheckbox5" ng-model="procedure.mappings.phase.cmz"> Commercialization
+			</label>			
+		</div>
+		
+		
+		<br>
+
+		<label for="roleGroup"><strong>Tech centers to which the procedure is local to </strong></label>
+
+		<br>
+		
+		
+
+		<div class="form-group">
+
+			<div  class="btn-group">
+			<label class="btn btn-primary" ng-click="setGlobal()"> Set as {{buttonText}} </label> 
+
+			</div>
+
+			<br><br><br>
+			<div ng-hide="procedure.mappings.global">
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.mappings.global" ng-model="procedure.mappings.center.abtc"> ABTC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.mappings.global" ng-model="procedure.mappings.center.atc"> AaTC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.mappings.global" ng-model="procedure.mappings.center.brgc"> BRGC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.mappings.global" ng-model="procedure.mappings.center.htc"> HTC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox"  ng-disabled="procedure.mappings.global" ng-model="procedure.mappings.center.mptc"> MPTC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.mappings.global" ng-model="procedure.mappings.center.ntc"> SNTC
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" ng-disabled="procedure.mappings.global" ng-model="procedure.mappings.center.ptc"> PTC
+				</label>		
+			</div>	
+		</div>
+
+
+
+		<label for="questions"><strong>Enter 3 questions that this procedure seeks to answer</strong></label>
+		
+		<br>
+		<div class="form-group">
+			<input type="text" class="form-control" maxlength="100" ng-model="procedure.mappings.questions[0]">
+		</div>
+		
+		<div class="form-group">			
+			<input type="text" class="form-control" maxlength="100" ng-model="procedure.mappings.questions[1]">
+		</div>
+		
+		<div class="form-group">
+			<input type="text" class="form-control" maxlength="100" ng-model="procedure.mappings.questions[2]">
+		</div>
+		
+</div>
+
+
+<div ng-show="step=='content'">
+	
+	<form role="form">
+
+		<br>
+
+		<div class="form-group">
+			<label for="url">Enter the content relating to the QMS procedure  </label>
+			<br>
+			<div>
+                <textarea ckeditor="editorOptions" name="editor" ng-model="procedure.data.content" ng-change="save()"></textarea>
+            </div>			
+		</div>
+		
+	</form>
+	
+</div>
+
+
+<div ng-show="step=='preview'">
+	
+	<h2> Preview </h2>
+
+	<div id="reader" style="border: 1px solid #C0C0C0;padding:10px;border-width:thick;border-style: groove;">
+		
+			<h2 class="text-center"> {{procedure.pid}}&nbsp; &nbsp;{{procedure.pname}} </h2> 
+			
+
+			<div class="lead" ng-bind-html="procedure.data.content"></div>
+			
+	</div>
+	
+</div>
+
+
+<div class="container" ng-show="step=='submit'">
+	<br>
+	<div class="jumbotron">
+		<h2> Please verify thoroughly before submitting the procedure</h2>
+		<p>This procedure will have to approved by the reviewer you chose in the initialization step</p>
+		<p><a class="btn btn-primary btn-lg" ng-click="submitDraft()" role="button">	Submit for approval </a></p>
+	</div>
+
+	<br>
+
+	<div class="alert alert-danger" ng-show="showSubmitError">
+		<table  class="table">
+			<thead> <tr> <th> Errors </th> </tr> </thead>
+			<tr ng-repeat='error in errors'>
+				<td> {{error}}</td>
+			</tr>
+		</table>
+	</div>
+</div>

@@ -2,6 +2,7 @@
 <html>
 
 <head>
+	
 <title> SIS Quality Management System</title>
 <script src="/libs/jquery/dist/jquery.min.js"></script>
 <script src="/libs/bootstrap/dist/js/bootstrap.js">
@@ -82,7 +83,7 @@
 				<div class="row top-buffer">
 					<div class="col-xs-6 col-xs-offset-3" ng-controller='indexController'>
 				    	<div class="input-group input-group-lg">
-						    <input type="search" autofocus="autofocus" class="form-control" ng-model="searchQuery">
+						    <input type="text" ng-keypress="($event.which === 13)?search():0" autofocus="autofocus" class="form-control" ng-model="searchQuery">
 						    <span class="input-group-btn">
 						    <button class="btn btn-primary" type="submit" ng-click="search()"><span class="glyphicon glyphicon-search"></span></button>
 						    </span>
@@ -92,7 +93,7 @@
 					
 
 				<div class="row top-buffer">
-	    			<div ng-view> </div>
+	    			<div ng-view > </div>
 	    		</div>
 
 	    		<div id="bodypush"> </div>

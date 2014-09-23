@@ -2,12 +2,10 @@
 
  var module = angular.module('deleteProcedureSelectorModule', []);
 
-
- var defComments = "Enter a brief comment on why you want to remove this procedure.."
  module.controller('deleteProcedureSelectorController', function($scope, $http, $location, $route, multiProcLoader, $window){
 
 	$scope.procedures = multiProcLoader
-	$scope.comments = "Enter your comments on why you want to remove the procedure.."
+	$scope.comments =""
 	$scope.showComments = true
 	$scope.showMsgFail = false
 
@@ -18,25 +16,34 @@
 	}
 	$scope.heading = "Remove Procedure"
 	$scope.procedureSelected = function() {
-								index = $scope.selectedProcedure.indexOf('|')
-								var cmnts =  $scope.comments == defComments ? "" : $scope.comments
-								console.log(cmnts)
-								$http.post('/deleteProcedure/',{pid:$scope.selectedPid, 
-																pname:$scope.selectedProcedure.substring(index, $scope.selectedProcedure.length),
-																owner:$window.sessionStorage.username, comments: cmnts}).then(function(obj){
-									
-									$location.path('/admin/links').search({id: $scope.selectedPid, onDelete: true});
-												
-								//	$route.reload()
 
-								},
-								function()
-								{
-									$route.reload()
-									$scope.showMsgFail = true
-																
-								})
-						}
+									if($scope.selectedPid)
+									{
+										$http.get('/admin/locked/'+$scope.selectedPid).success(function(data){
+											console.log(data)
+											if(data.locked)
+											{
+												$scope.showMsgLock = true
+												$scope.locker = data.locker
+											}
+											else
+											{
+												index = $scope.selectedProcedure.indexOf('|')
+												$http.post('/deleteProcedure/',{pid:$scope.selectedPid, owner:$window.sessionStorage.username, comments: $scope.comments}).then(
+																				function(obj)
+																				{													
+																					$location.path('/admin/links').search({id: $scope.selectedPid, onDelete: true});
+																				},
+																				function()
+																				{
+																					$route.reload()
+																					$scope.showMsgFail = true
+																												
+																				})
+											}
+										})
+									}
+							}
 
 
 	$scope.updateSelection = function() {

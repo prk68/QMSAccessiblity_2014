@@ -1,30 +1,33 @@
-var procedureFromDB = angular.module('dBProcedureServiceModule', ['ngResource'])
+var module = angular.module('dBProcedureServiceModule', ['ngResource'])
 
 
-procedureFromDB.factory('procedureResource', ['$resource', function($resource){
+module.factory('procedureResource', ['$resource', function($resource){
 
 			return $resource("/procedures/:id", {id: '@pid'})
 }]);
 
 
-procedureFromDB.factory('trashedProcedureResource', ['$resource', function($resource){
+module.factory('draftResource', ['$resource', function($resource){
 
-			return $resource("/procedures/trash/:id", {id: '@pid'})
+			return $resource("/admin/drafts/:id", {id: '@pid'})
+}]);
+
+module.factory('versionListResource', ['$resource', function($resource){
+
+			return $resource("/versions/:id", {id: '@pid'})
+}]);
+
+module.factory('versionResource', ['$resource', function($resource){
+
+			return $resource("/procedure/baseline/:id", {id: '@pid'})
 }]);
 
 
-procedureFromDB.factory('activityLogResource', ['$resource', function($resource){
-
-			return $resource("/activity")
-}]);
-
-
-procedureFromDB.factory('procedureFromDbInitializer', ['procedureResource', '$q', '$route' , function(procedureResource, $q, $route){
+module.factory('procedureFromDBLoader', ['procedureResource', '$q', '$route' , function(procedureResource, $q, $route){
 
 	return function(){
 
 		var delay = $q.defer()
-		console.log('boooooooooooooooooooooooootttttttttttttttt')
 		if(!$route.current.params.id){
 			delay.resolve({})
 			return delay.promise;
@@ -43,9 +46,86 @@ procedureFromDB.factory('procedureFromDbInitializer', ['procedureResource', '$q'
 		return delay.promise
 	}
 }]);
+
+module.factory('versionNumberLoader', ['versionResource', '$q', '$route' , function(versionResource, $q, $route){
+
+	return function(){
+
+		var delay = $q.defer()
+		if(!$route.current.params.id){
+			delay.resolve({})
+			return delay.promise;
+		}
+			
+		versionResource.get({id:$route.current.params.id}, 
+		function(version)
+		{			
+			console.log(version)
+			delay.resolve(version)
+
+		}, 
+		function()
+		{
+			delay.reject('unable to fetch')
+		})
+		return delay.promise
+	}
+}]);
+
+
+module.factory('versionList', ['versionListResource', '$q', '$route' , function(versionListResource, $q, $route){
+
+	return function(){
+
+		var delay = $q.defer()
+		if(!$route.current.params.id){
+			delay.resolve({})
+			return delay.promise;
+		}
+			
+		versionListResource.get({id:$route.current.params.id}, 
+		function(versions)
+		{			
+			delay.resolve(versions)
+
+		}, 
+		function()
+		{
+			delay.reject('unable to fetch')
+		})
+		return delay.promise
+	}
+}]);
+
+module.factory('draftFromDBLoader', ['draftResource', '$q', '$route' , function(draftResource, $q, $route){
+
+	return function(){
+
+		var delay = $q.defer()
+		console.log($route.current.params.id)
+		if(!$route.current.params.id){
+			delay.resolve({})
+			return delay.promise;
+		}
+			
+		draftResource.get({id:$route.current.params.id}, 
+		function(draft)
+		{			
+			console.log(draft)
+			delay.resolve(draft)
+
+		}, 
+		function()
+		{
+			console.log("ddddddddddddddddddddddddd")
+			delay.reject('unable to fetch')
+		})
+		return delay.promise
+	}
+}]);
 	
 	
-procedureFromDB.factory('multiProcedureLoader', ['procedureResource', '$q', '$route' , function(procedureResource, $q, $route){
+module.factory('multiProcedureLoader', ['procedureResource', '$q', '$route' , function(procedureResource, $q, $route){
 
 	return function(){
 
@@ -65,8 +145,46 @@ procedureFromDB.factory('multiProcedureLoader', ['procedureResource', '$q', '$ro
 		return delay.promise
 	}
 }]);
+
+
+module.factory('multiDraftLoader', ['draftResource', '$q', '$route' , function(draftResource, $q, $route){
+
+	return function(){
+
+		var delay = $q.defer()
+		console.log('boooooooooooooooooooooooootttttttttttttttt22222222222222222222222222222')
+		draftResource.query(
+		function(drafts)
+		{
+			
+			delay.resolve(drafts)
+
+		}, 
+		function()
+		{
+			delay.reject('unable to fetch')
+		})
+		return delay.promise
+	}
+}]);
+
+
+
+
+
+
+module.factory('trashedProcedureResource', ['$resource', function($resource){
+
+			return $resource("/admin/procedures/trash/:id", {id: '@pid'})
+}]);
+
+
+module.factory('activityLogResource', ['$resource', function($resource){
+
+			return $resource("/activity")
+}]);
 	
-procedureFromDB.factory('trashProcedureLoader', ['trashedProcedureResource', '$q', '$route' , function(trashedProcedureResource, $q, $route){
+module.factory('trashProcedureLoader', ['trashedProcedureResource', '$q', '$route' , function(trashedProcedureResource, $q, $route){
 
 	return function(){
 
@@ -88,7 +206,7 @@ procedureFromDB.factory('trashProcedureLoader', ['trashedProcedureResource', '$q
 
 
 
-procedureFromDB.factory('multiTrashProcedureLoader', ['trashedProcedureResource', '$q', '$route' , function(trashedProcedureResource, $q, $route){
+module.factory('multiTrashProcedureLoader', ['trashedProcedureResource', '$q', '$route' , function(trashedProcedureResource, $q, $route){
 
 	return function(){
 
@@ -96,20 +214,23 @@ procedureFromDB.factory('multiTrashProcedureLoader', ['trashedProcedureResource'
 		console.log('booooooooooooooooooooooooo44444444444444444444444444')
 		trashedProcedureResource.query(function(procedures)
 		{
+			console.log('matchhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
 			console.log(procedures)
 			delay.resolve(procedures)
 
 		}, 
 		function()
 		{
+			console.log('matchhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
 			delay.reject('unable to fetch')
 		})
+
 		return delay.promise
 	}
 }]);
 
 
-procedureFromDB.factory('activityLogLoader', ['activityLogResource', '$q', '$route' , function(activityLogResource, $q, $route){
+module.factory('activityLogLoader', ['activityLogResource', '$q', '$route' , function(activityLogResource, $q, $route){
 
 	return function(){
 

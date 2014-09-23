@@ -1,0 +1,49 @@
+
+<div class="container">
+	
+	<div class="row">
+		<div class="col-xs-4 col-xs-offset-4">
+			<div class="btn-group">
+			  	<button type="button" class="btn btn-success" ng-show="isReviewer()" ng-click="approve()" >Approve</button>
+			 	<button type="button" class="btn btn-warning" ng-show="isReviewer()" ng-click="activateCommentsBox()">Reject</button>
+			 	<button type="button" class="btn btn-info" ng-show="isOwner()" ng-click="rework()" >Rework</button>
+			 	<button type="button" class="btn btn-danger" ng-show="isOwner()" ng-click="discard()">Discard</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="row top-buffer-half"> </div>
+
+	<div class="form-group" ng-show="showCommentsBox">
+		<form role="form" ng-submit="reject()">
+			<label for="name"><strong>Comments </strong></label>
+			<textarea class="form-control" ng-model="rejectionCmnts" rows="5" maxlength="200"></textarea>
+			<br>
+			<button type="submit" class="btn btn-warning">Submit</button>
+		</form>
+	</div>
+		
+
+	<div class="row top-buffer-half"> </div>
+
+	<div id="reader" style="border: 1px solid #C0C0C0;padding:10px;border-width:thick;border-style: groove;">
+		
+			<h2 class="text-center"> {{procedure.pid}}&nbsp; &nbsp;{{procedure.pname}} </h2> 
+			<h2 class="text-center"> <small> Version: {{procedure.version}} </small> </h2> 
+
+			<div class="lead" ng-bind-html="procedure.data.content"></div>
+
+			<div class="alert alert-info"> Role Mappings : {{roles}} </div>
+			<div class="alert alert-info"> Phase Mappings : {{phases}} </div>
+			<div class="alert alert-info"> Center Mappings : {{centers}} </div>
+			
+	</div>
+	
+	<h2 class="lead"> <u> Review comments </u></h2>
+
+	<ul>
+		<li ng-repeat="remark in procedure.rejections.slice().reverse()"> <div class="alert alert-warning"> {{remark}} </div> </li>
+	</ul>
+
+
+</div>

@@ -1,4 +1,4 @@
-var mod = angular.module('qmsAdminApp', ['ngRoute', 'appAdminRoutes', 'ngCkeditor', 'ui.bootstrap', 'linksResolveModule', 'linksSelectorModule', 'defaultProcedureServiceModule', 'deadLinksLogModule', 'procedureCRUDCtrlModule', 'editProcedureSelectorModule','procedureRevListCtrl','activityLogModule','revertProcedureSelectorModule', 'dBProcedureServiceModule', 'trashCanCtrlModule','adminProvider', 'deleteProcedureSelectorModule', 'ngSanitize']);
+var mod = angular.module('qmsAdminApp', ['ngRoute', 'appAdminRoutes', 'ngCkeditor', 'ui.bootstrap', 'validateDraft', 'draftReaderModule', 'linksResolveModule', 'linksSelectorModule', 'defaultProcedureServiceModule', 'deadLinksLogModule', 'approveRejectListModule', 'procedureCRUDCtrlModule', 'procedureFormModule', 'editProcedureSelectorModule','procedureRevListCtrl','activityLogModule','revertProcedureSelectorModule', 'dBProcedureServiceModule', 'trashCanCtrlModule','adminProvider', 'deleteProcedureSelectorModule', 'ngSanitize']);
 
 
 mod.factory('authService', function($http, $window) {
@@ -17,6 +17,7 @@ mod.factory('authService', function($http, $window) {
 
 
 mod.controller('loginController', function($scope, $location, authService, $window){
+
 
 
 	$scope.profile = {alias:'', password:''};
@@ -71,8 +72,9 @@ mod.config(function ($httpProvider) {
   $httpProvider.interceptors.push('authInterceptor');
 });
 
-mod.run(['$rootScope', '$location',  'authService', '$window', function($rootScope, $location, authService, $window) {
+mod.run(['$rootScope', '$location',  'authService', '$window', function($rootScope, $location,  authService, $window) {
     $rootScope.validated = ( $window.sessionStorage.validated == "true")
+
     $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
         console.log($window.sessionStorage)
         console.log(nextRoute)

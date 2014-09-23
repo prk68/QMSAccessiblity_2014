@@ -13,8 +13,24 @@
 	}
 
 	$scope.procedureSelected = function() {
-							if($scope.selectedPid)
-								$location.path('/admin/procedurecrud/step1').search({id: $scope.selectedPid});										
+								if($scope.selectedPid)
+								{
+									$http.get('/admin/locked/'+$scope.selectedPid).then(
+									function(obj)
+									{
+										if(obj.data.locked)
+										{
+											$scope.showMsgLock = true
+											$scope.locker = obj.data.locker
+										}
+										else
+											$location.path('/admin/edit/form').search({id: $scope.selectedPid});
+									},
+									function(err)
+									{
+										$location.path('/admin/fail-selection')
+									})										
+								}									
 							}
 
 
