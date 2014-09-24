@@ -7,8 +7,8 @@
  	console.log($scope.procedure)
 	$scope.mappings = {role:[], phase:[], center:[]}
 
-	$scope.isReviewer = function(){return $scope.procedure.metaData.reviewer ==  $window.sessionStorage.username}
-	$scope.isOwner    = function(){return $scope.procedure.metaData.owner ==  $window.sessionStorage.username}
+	$scope.isReviewer = function(){return $scope.procedure.metaData.reviewer.toUpperCase() ==  $window.sessionStorage.username.toUpperCase()}
+	$scope.isOwner    = function(){return $scope.procedure.metaData.owner.toUpperCase() ==  $window.sessionStorage.username.toUpperCase()}
 	
 	if($scope.procedure.mappings.role.pfl)
 		$scope.mappings.role.push('Portfolio')
