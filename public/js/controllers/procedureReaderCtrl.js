@@ -3,13 +3,11 @@
 var procedureCRUDCtrlModule = angular.module('procedureReaderCtrlModule', [])
 
 
-procedureCRUDCtrlModule.controller('procedureReaderController', function($scope, $http, $routeParams) {
+procedureCRUDCtrlModule.controller('procedureReaderController', function($scope, $http, $routeParams, $sce, initializer) {
 
-	$http.get('/procedures/'+$routeParams.id).success(function(data, status, headers, config) 
-		{
-			console.log(data)
-			$scope.procedure = data
-		});
+	$scope.procedure = initializer
+	console.log($scope.procedure)
+	$scope.trustedHtml = $sce.trustAsHtml($scope.procedure.data.content);
 
 	$scope.printReader = function() {
 		var printContents = document.getElementById("reader").innerHTML;

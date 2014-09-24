@@ -23,6 +23,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 		})
 
 		.when('/statement', {
+			controller: 'procedureReaderController',
 			templateUrl: '../views/anchor.html',
 		})
 
@@ -36,7 +37,12 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
 		.when('/reader/:id', {
 			templateUrl: '../views/procedureReader.html',
-			controller: 'procedureReaderController'
+			controller: 'procedureReaderController',
+			resolve : {
+				initializer: function(procedureFromDBLoader) {
+						return procedureFromDBLoader();
+					},
+			}
 		})
 
 		.when('/searchQMS', {

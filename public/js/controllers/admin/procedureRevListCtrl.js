@@ -3,12 +3,13 @@
  var module = angular.module('procedureRevListCtrl', []);
  
 
- module.controller('procedureRevListController', function($scope, $http, $location, $route, procedureDBLoader, existingDraft, versionList, baselineObj, $window){
+ module.controller('procedureRevListController', function($scope, $http, $location, $route, procedureDBLoader, existingDraft, versionList, baselineObj, $window, $sce){
  	
  	if(existingDraft.pid)
  		$location.path('/admin/locked')
 
 	$scope.procedure = procedureDBLoader
+	
 	$scope.baseline = baselineObj.baseline
 	console.log($scope.procedure)
 	$scope.revisions = []
@@ -29,6 +30,7 @@
 									{
 										console.log(procVersion)
 										$scope.consultActivated = true;
+										$scope.html = $sce.trustAsHtml($scope.procedure.data.content);
 										$scope.archiveVersion = procVersion
 									})	
 							  }  

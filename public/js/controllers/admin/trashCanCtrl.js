@@ -20,6 +20,7 @@ trashCanCtrlModule.controller('trashCanController', function($scope, $http, $rou
 		$http.get('/admin/procedures/trash/'+procedureId).success(function(result, status, headers, config) {
 			 
 			$scope.trashedProcedure = result
+			$scope.html = $sce.trustAsHtml($scope.trashedProcedure.data.content);
 			console.log(result)
 		});
 	}

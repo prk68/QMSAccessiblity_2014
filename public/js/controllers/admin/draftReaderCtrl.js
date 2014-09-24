@@ -1,11 +1,12 @@
  var module = angular.module('draftReaderModule', []);
 
 
- module.controller('draftReaderController', function($scope, draftFromDB, $location, $http, $window){
+ module.controller('draftReaderController', function($scope, $sce, draftFromDB, $location, $http, $window){
 
  	$scope.procedure = draftFromDB;
  	console.log($scope.procedure)
 	$scope.mappings = {role:[], phase:[], center:[]}
+	$scope.html = $sce.trustAsHtml($scope.procedure.data.content);
 
 	$scope.isReviewer = function(){return $scope.procedure.metaData.reviewer.toUpperCase() ==  $window.sessionStorage.username.toUpperCase()}
 	$scope.isOwner    = function(){return $scope.procedure.metaData.owner.toUpperCase() ==  $window.sessionStorage.username.toUpperCase()}
