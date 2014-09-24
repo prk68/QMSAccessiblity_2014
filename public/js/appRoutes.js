@@ -23,8 +23,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 		})
 
 		.when('/statement', {
-			controller: 'procedureReaderController',
-			templateUrl: '../views/anchor.html',
+			templateUrl: '../views/construction.html',
 		})
 
 		.when('/answers', {
