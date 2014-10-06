@@ -1,0 +1,48 @@
+
+
+<h3> <b>Add a new image to the library </b> </h3>
+<br>
+<form class="form-inline" role="form" ng-submit="upload()">
+	<label>Name</label>
+	<div class="form-group">
+		
+		<input type="text" class="form-control" ng-model="imgName">
+	</div>
+
+	<div class="form-group">
+		<label class="sr-only" for="inputfile">Select file</label>
+		<input type="file" file-model="myFile" accept="image/*">
+	</div>
+
+	<button type="submit" class="btn btn-primary" >Add</button>
+</form>
+
+
+<br><br><br>
+
+<div class="alert alert-warning" ng-show="showExistsMsg">
+	<label> An image with this name already exists. </label> 
+	<div class="btn-group">
+		<button type="button" class="btn btn-default" ng-click="replace()">Replace</button>
+		<button type="button" class="btn btn-primary"  ng-click="cancel()">Cancel</button>
+	</div>
+</div>
+
+<form class="form-inline" role="form" ng-submit="search()" >
+	<div class="form-group">
+		<label for="name">Image name</label>
+		<input type="text" ng-model= "query" class="form-control">					
+		<button type="submit" class="btn btn-primary">Search</button>
+	</div>
+</form>
+
+<div class="row">
+	<div class="col-sm-4" ng-repeat="result in results" ng-show="result.show">
+		<a href="/res/images/{{result.name}}" target="_blank" class="thumbnail">
+			<img src="/res/images/{{result.name}}" alt="{{result.name}}">
+		</a>
+		<p> {{result.name}} </p>
+	</div>
+</div>
+
+

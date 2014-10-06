@@ -22,6 +22,10 @@ module.factory('versionResource', ['$resource', function($resource){
 			return $resource("/procedure/baseline/:id", {id: '@pid'})
 }]);
 
+module.factory('imgResource', ['$resource', function($resource){
+
+			return $resource("/res/images/:id", {id: '@pid'})
+}]);
 
 module.factory('procedureFromDBLoader', ['procedureResource', '$q', '$route' , function(procedureResource, $q, $route){
 
@@ -229,6 +233,52 @@ module.factory('multiTrashProcedureLoader', ['trashedProcedureResource', '$q', '
 	}
 }]);
 
+module.factory('SingleImageLoader', ['imgResource', '$q', '$route' , function(imgResource, $q, $route){
+
+	return function(){
+
+		var delay = $q.defer()
+		console.log($route.current.params.id)
+		if(!$route.current.params.id){
+			delay.resolve({})
+			return delay.promise;
+		}
+			
+		imgResource.get({id:$route.current.params.id}, 
+		function(img)
+		{			
+			console.log(img)
+			delay.resolve(img)
+
+		}, 
+		function()
+		{
+			console.log("ddddddddddddddddddddddddd")
+			delay.reject('unable to fetch')
+		})
+		return delay.promise
+	}
+}]);
+
+
+module.factory('imageLoader', ['imgResource', '$q', '$route' , function(imgResource, $q, $route){
+
+	return function(){
+
+		var delay = $q.defer()
+		imgResource.query(function(images)
+		{
+			delay.resolve(images)
+
+		}, 
+		function()
+		{
+			delay.reject('unable to fetch')
+		})
+
+		return delay.promise
+	}
+}]);
 
 module.factory('activityLogLoader', ['activityLogResource', '$q', '$route' , function(activityLogResource, $q, $route){
 

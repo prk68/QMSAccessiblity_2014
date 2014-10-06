@@ -1,4 +1,7 @@
-var mod = angular.module('qmsAdminApp', ['ngRoute', 'appAdminRoutes', 'ngCkeditor', 'ui.bootstrap', 'validateDraft', 'draftReaderModule', 'linksResolveModule', 'linksSelectorModule', 'defaultProcedureServiceModule', 'deadLinksLogModule', 'approveRejectListModule', 'procedureCRUDCtrlModule', 'procedureFormModule', 'editProcedureSelectorModule','procedureRevListCtrl','activityLogModule','revertProcedureSelectorModule', 'dBProcedureServiceModule', 'trashCanCtrlModule','adminProvider', 'deleteProcedureSelectorModule', 'ngSanitize']);
+var mod = angular.module('qmsAdminApp', ['ngRoute', 'appAdminRoutes', 'ngCkeditor', 'ui.bootstrap', 'validateDraft', 'draftReaderModule', 'linksResolveModule', 'linksSelectorModule', 
+        'defaultProcedureServiceModule', 'deadLinksLogModule', 'approveRejectListModule', 'procedureCRUDCtrlModule', 'procedureFormModule', 'editProcedureSelectorModule',
+        'procedureRevListCtrl','activityLogModule','revertProcedureSelectorModule', 'dBProcedureServiceModule', 'trashCanCtrlModule','adminProvider', 'deleteProcedureSelectorModule', 
+        'ngSanitize', 'fileModelModule', 'fileUploadModule', 'imagesCtrlModule', 'galleryModule']);
 
 
 mod.factory('authService', function($http, $window) {

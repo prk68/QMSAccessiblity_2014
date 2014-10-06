@@ -1,7 +1,7 @@
 
 var fs = require('fs');
 
-//var store_dir = 'C:/Bitnami/starter-node-angular-master/app/store/'; // your directory
+var res_dir = 'D:/QMSAccessiblity_2014/public'; // your directory
 
 var dbController = require('./controllers/dbController.js')
 var expressJwt = require('express-jwt');
@@ -277,6 +277,19 @@ module.exports = function(app) {
 })
 
 
+	app.post('/images/upload', function(req, res){
+		console.log(req.body.new_name)
+		console.log(req.files.file.path)
+		dbController.addImage(req.body.new_name, req.files.file.path, res)
+	})
+
+	app.get('/res/images', function(req, res){
+		dbController.getAllImages(req, res)
+	})
+
+	app.get('/res/images/:id', function(req, res){
+		dbController.getImage(req, res)
+	})
 
 
 	// frontend routes =========================================================

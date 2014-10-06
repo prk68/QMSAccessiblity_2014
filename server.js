@@ -17,7 +17,7 @@ var port = process.env.PORT || 8080; // set our port
 app.configure(function() {
 	app.use(express.static(__dirname + '/public')); 	// set the static files location /public/img will be /img for users
 	app.use(express.logger('dev')); 					// log every request to the console
-	app.use(express.bodyParser()); 						// pull information from html in POST
+	app.use(express.bodyParser({uploadDir:'./public/res'})); 						// pull information from html in POST
 	app.use(express.methodOverride()); 					// simulate DELETE and PUT
   app.use('/deleteProcedure', expressJwt({secret: secret}));
   app.use('/procedure/add', expressJwt({secret: secret}));

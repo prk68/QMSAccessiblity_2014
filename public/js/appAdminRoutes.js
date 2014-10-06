@@ -364,6 +364,25 @@ angular.module('appAdminRoutes', []).config(['$routeProvider', '$locationProvide
 			access: { requiredLogin: true }	
 		})
 
+		.when('/admin/images', {
+			templateUrl: '../../views/admin/images.html',
+			controller: 'imagesController',
+			resolve: {
+				imageLoader: function(imageLoader) {
+					return imageLoader();
+				},
+				
+			},
+			access: { requiredLogin: true }	
+		})
+
+		.when('/gallery', {
+			templateUrl: '../../views/admin/gallery.html',
+			controller: 'galleryController',	
+			
+		})
+
+
 		.otherwise({
 			redirectTo: function() {
 			console.log('bumped', arguments);

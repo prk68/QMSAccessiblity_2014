@@ -17,6 +17,7 @@
 <script src="/js/services/dbProcedure.js"></script>
 <script src="/js/services/adminProvider.js"></script>
 <script src="/js/services/validateDraft.js"></script>
+<script src="/js/services/fileupload.js"></script>
 <script src="/js/controllers/admin/newProcedureCtrl.js"></script>
 <script src="/js/controllers/admin/editProcedureSelector.js"></script>
 <script src="/js/controllers/admin/deleteProcedureSelector.js"></script>
@@ -30,8 +31,11 @@
 <script src="/js/controllers/admin/procedureformCtrl.js"></script>
 <script src="/js/controllers/admin/approverejectCtrl.js"></script>
 <script src="/js/controllers/admin/draftReaderCtrl.js"></script>
+<script src="/js/controllers/admin/imagesController.js"></script>
+<script src="/js/controllers/admin/galleryCtrl.js"></script>
 <script src="/libs/ckeditor/ckeditor.js"></script>
 <script src="/js/directives/ckeditor/directives.js"></script>
+<script src="/js/directives/fileModel.js"></script>
 <link rel="stylesheet" href="/libs/bootstrap/dist/css/bootstrap.css">
 <link rel="stylesheet" href="/static-local/css/customStyles.css">
 <link rel="stylesheet" href="/static-local/css/mh.css">
@@ -90,6 +94,7 @@
 									<li><a data-target=".nav-collapse" href="/admin/trash">Trash can &nbsp;<span class="glyphicon glyphicon-trash"></a></li>
 									<li><a data-target=".nav-collapse" href="/admin/log">Activity log &nbsp;<span class="glyphicon glyphicon-th"></a></li>
 									<li><a data-target=".nav-collapse" href="/admin/links/selector">Dead links &nbsp;<span class="glyphicon glyphicon-minus"></a></li>
+									<li><a data-target=".nav-collapse" href="/admin/images">Images &nbsp;<span class="glyphicon glyphicon-picture"></a></li>
 								</ul>
 							</li>
 

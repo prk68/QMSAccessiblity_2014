@@ -30,7 +30,7 @@
 									{
 										console.log(procVersion)
 										$scope.consultActivated = true;
-										$scope.html = $sce.trustAsHtml($scope.procedure.data.content);
+										$scope.html = $sce.trustAsHtml(procVersion.data.content);
 										$scope.archiveVersion = procVersion
 									})	
 							  }  
@@ -38,7 +38,7 @@
 
 	$scope.revertProcedure = function(nver) 
 							 {
-								$http.post('/admin/revert', {pid:$scope.procedure.pid,version:nver, owner:$window.sessionStorage.username,	omments:$scope.comments}).success(
+								$http.post('/admin/revert', {pid:$scope.procedure.pid,version:nver, owner:$window.sessionStorage.username,	comments:$scope.comments}).success(
 									function()
 									{
 										$route.reload()

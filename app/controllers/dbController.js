@@ -4,10 +4,10 @@ var mongoose = require('mongoose')
 var indexModel = require("../models/procedure").indexModel;
 var artifactModel = require("../models/procedure").artifactModel;
 var notificationModel = require("../models/procedure").notificationModel;
-
+var imageModel = require("../models/procedure").imageModel;
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({  host: 'localhost:9200',  log: 'trace'});
-
+var keyword_extractor = require("keyword-extractor");
 var S = require('string')
 
 /**************************************************************************************************************************************/
@@ -20,7 +20,7 @@ var procedureExists = function(request, response){
 		return;
 	}
 
-	indexModel.count({pid: request.params.id}, function(err, count){
+	artifactModel.count({pid: request.params.id, in_draft:false}, function(err, count){
 		if(!err)
 		{
 			if(count > 0)
@@ -89,7 +89,13 @@ var submitDraftProcedure = function(request, response){
 	newDraft.draft_type = request.body.draft_type
 	newDraft.rejections =  []
 	newDraft.rejected = false
-	
+	newDraft.tags = []
+	newDraft.tags.push(keyword_extractor.extract(newDraft.mappings.questions[0],{language:"english", return_changed_case:true}))
+	newDraft.tags.push(keyword_extractor.extract(newDraft.mappings.questions[1],{language:"english", return_changed_case:true}))
+	newDraft.tags.push(keyword_extractor.extract(newDraft.mappings.questions[2],{language:"english", return_changed_case:true}))
+	newDraft.active = false
+	newDraft.trashed = false
+	console.log(newDraft.tags)
 	newDraft.save(function (err) { 
 		if (err) 
 			response.send(501, 'draft ' + newDraft.pid + 'could not be saved'); 
@@ -100,6 +106,11 @@ var submitDraftProcedure = function(request, response){
 
 var updateDraftProcedure = function(request, response){
 
+	newTags = []
+	newTags.push(keyword_extractor.extract( request.body.procedure.mappings.questions[0],{language:"english", return_changed_case:true}))
+	newTags.push(keyword_extractor.extract( request.body.procedure.mappings.questions[1],{language:"english", return_changed_case:true}))
+	newTags.push(keyword_extractor.extract( request.body.procedure.mappings.questions[2],{language:"english", return_changed_case:true}))
+	
 	artifactModel.findOneAndUpdate({pid: request.body.procedure.pid, in_draft:true}, 
 										{
 											version : request.body.procedure.version,
@@ -107,7 +118,8 @@ var updateDraftProcedure = function(request, response){
 											mappings : request.body.procedure.mappings,
 											metaData : request.body.procedure.metaData,
 											data : request.body.procedure.data,
-											rejected: false
+											rejected: false,
+											tags: newTags
 										}, function(err, result){
 		if (err && newDraft) 
 			response.send(501, 'draft ' + newDraft.pid + 'could not be updated'); 
@@ -118,10 +130,10 @@ var updateDraftProcedure = function(request, response){
 
 var getActiveVersionNumber = function(request, response){
 
-	indexModel.findOne({pid:request.params.id, trashed: false}, function(err, result)
+	artifactModel.findOne({pid:request.params.id, active:true, trashed: false}, function(err, result)
 	{
 		if(!err && result)
-			response.send({baseline:result.active_version})
+			response.send({baseline:result.version})
 		else
 			response.status(500).send()
 	})	
@@ -132,6 +144,7 @@ var getNonActiveVersion = function(request, response){
 
 	artifactModel.findOne({pid:request.query.id, version:request.query.rev}, function(err, result)
 	{
+		console.log(result)
 		if(!err)
 			response.send(result)
 		else
@@ -141,8 +154,8 @@ var getNonActiveVersion = function(request, response){
 
 
 
-var getVersionIds = function(request, response){
-
+var getVersionIds = function(request, response)
+{
 	artifactModel.find({pid: request.params.id, in_draft:false}, 'version date_of_modification', function(err, result){
 		if(!err)
 		{
@@ -160,8 +173,8 @@ var getVersionIds = function(request, response){
 	})	
 }
 
-var getAllDrafts = function(response){
-
+var getAllDrafts = function(response)
+{
 	artifactModel.find({in_draft:true}, 'pid pname version date_of_modification metaData draft_type rejected', function(err, drafts){
 		if(!err)
 			response.send(drafts)
@@ -170,8 +183,8 @@ var getAllDrafts = function(response){
 	})
 }
 
-var getDraft = function(request, response){
-	
+var getDraft = function(request, response)
+{	
 	artifactModel.findOne({pid: request.params.id, in_draft:true}, function(err, draft){
 		if(!err)
 			response.send(draft)
@@ -180,81 +193,82 @@ var getDraft = function(request, response){
 	})
 }
 
-var approveDraft = function(request, response){
+var approveDraft = function(request, response)
+{	
+	var curDate = new Date()
 	
-	artifactModel.findOneAndUpdate({pid: request.body.pid, in_draft:true}, {in_draft: false, rejected:false, remarks:[]}, function(err, procedure){
+	artifactModel.update({pid: request.body.pid}, {active:false}, {multi:true}, function(err, result)
+	{
 		if(err)
-			response.status(500).send()
+			response.status(500).send({})
 		else
 		{
-			var curDate = new Date()
-			indexModel.update({pid:procedure.pid, pname: procedure.pname}, {trashed:false, date_of_modification: curDate, active_version:procedure.version}, {upsert:true},
-				function(err){
+			artifactModel.findOneAndUpdate({pid: request.body.pid, in_draft:true}, {active:true, in_draft: false, date_of_modification: curDate, rejected:false, remarks:[]}, function(err, procedure){
+			if(err)
+				response.status(500).send()
+			else
+			{
+				var notifType = (procedure.draft_type == "new") ? "Created" : "Edited"
+					
+				var newNotification = new notificationModel({
+											pid: procedure.pid,
+											pname: procedure.pname,
+											type: notifType,
+											author: procedure.metaData.owner,
+											reviewer: procedure.metaData.reviewer,
+											date:  curDate,
+											comments: procedure.metaData.comments,
+											version: procedure.version})
+
+				newNotification.save(function(err)
+				{
 					if(err)
 						response.status(500).send()
 					else
 					{
-						var notifType = (procedure.draft_type == "new") ? "Created" : "Edited"
-				
-						var newNotification = new notificationModel({
-													pid: procedure.pid,
-													pname: procedure.pname,
-													type: notifType,
-													author: procedure.metaData.owner,
-													reviewer: procedure.metaData.reviewer,
-													date:  curDate,
-													comments: procedure.metaData.comments,
-													version: procedure.version})
-
-						newNotification.save(function(err){
-							if(err)
-								response.status(500).send()
-							else
-							{
-								client.index({
-									index: 'procedurecontent',
-									type: 'String',
-									id: procedure.pid,
-									body: {							
-										name: procedure.pname,
-										content : S(procedure.data.content).stripTags().s
-									 }
-									}, 
-									function(err)
-									{
-										if(!err)
-										{
-											client.index({
-												index: 'procedurecontenthtml',
-												type: 'String',
-												id: procedure.pid,
-												body: {							
-													name: procedure.pname,
-													content : S(procedure.data.content).s
-												 }
-												},function(err){
-													if(!err)
-														response.send('ok');
-													else
-														response.status(500).send()
-												})
-										}
-										else
-											response.send('ok')
-								})								
-							}										
-						})						
-					}						
-			})
+						client.index({
+							index: 'procedurecontent',
+							type: 'String',
+							id: procedure.pid,
+							body: {							
+								name: procedure.pname,
+								content : S(procedure.data.content).stripTags().s
+							 }
+						}, 
+						function(err)
+						{
+								if(!err)
+								{
+									client.index({
+										index: 'procedurecontenthtml',
+										type: 'String',
+										id: procedure.pid,
+										body: {							
+											name: procedure.pname,
+											content : S(procedure.data.content).s
+										 }
+										},function(err){
+											if(!err)
+												response.send('ok');
+											else
+												response.status(500).send()
+										})
+								}
+								else
+									response.send('ok')
+						})								
+					}										
+				})						
+			}						
+		})
 		}
-	})
+	})	
 }
 
 
 var getAllProcedures = function(response){
 
-	indexModel.find({trashed:false}, function(err, procedure){
-	
+	artifactModel.find({trashed:false, active:true, in_draft:false}, 'pid pname version date_of_modification mappings metaData data tags', function(err, procedure){
 		if(!err)
 			response.send(procedure)
 		else
@@ -264,22 +278,11 @@ var getAllProcedures = function(response){
 
 var getProcedure = function(request, response){
 
-	indexModel.findOne({pid: request.params.id, trashed:false}, 'active_version', function(err, result){
-
+	artifactModel.findOne({pid: request.params.id, trashed:false, active:true, in_draft:false}, function(err, result){
 		if(err)
 			response.status(500).send()
-		else{
-			if(result)
-			{
-				artifactModel.findOne({pid: request.params.id, version:result.active_version, in_draft:false}, function(err, procedure){
-					
-					if(!err)
-						response.send(procedure)
-					else
-						response.status(500).send({})
-				})
-			}
-		}
+		else
+			response.send(result)
 	})
 }
 
@@ -297,8 +300,6 @@ var discardDraftProcedure = function(request, response){
 
 var rejectDraftProcedure = function(request, response){
 
-	console.log(request.body.remarks)
-
 	artifactModel.update({pid: request.body.pid, in_draft:true}, {$push: {rejections:request.body.remarks}, rejected:true}, function (err) { 
 		console.log(err)
 		if (err) 
@@ -311,7 +312,7 @@ var rejectDraftProcedure = function(request, response){
 
 var removeProcedure = function(request, response){
 	var curDate = new Date()
-	indexModel.findOneAndUpdate({pid: request.body.pid}, {trashed: true, date_of_modification: curDate}, function (err, procedure) { 
+	artifactModel.findOneAndUpdate({pid: request.body.pid, active:true, in_draft:false}, {trashed: true, date_of_modification: curDate}, function (err, procedure) { 
 		console.log(err)
 		if (err) 
 			response.send(501, 'procedure could not be remove'); 
@@ -340,7 +341,7 @@ var removeProcedure = function(request, response){
 var restoreProcedure = function(request, response){
 
 	var curDate = new Date()
-	indexModel.findOneAndUpdate({pid: request.body.pid}, {trashed: false, date_of_modification: curDate}, function (err, procedure) { 
+	artifactModel.findOneAndUpdate({pid: request.body.pid, active:true, in_draft:false, trashed:true}, {trashed: false, date_of_modification: curDate}, function (err, procedure) { 
 		console.log(err)
 		if (err) 
 			response.send(501, 'procedure could not be restored'); 
@@ -371,15 +372,15 @@ var restoreProcedure = function(request, response){
 var revertProcedure = function(request, response){
 
 	var curDate = new Date()
-	indexModel.findOneAndUpdate({pid: request.body.pid}, {active_version:request.body.version, date_of_modification: curDate}, function (err, procedure) { 
+	console.log(request.body)
+	artifactModel.update({pid: request.body.pid}, {active:false, date_of_modification: curDate}, { multi: true }, function (err) { 
 		console.log(err)
 		if (err) 
 			response.send(501, 'procedure could not be reverted'); 
 		else
 		{
-			artifactModel.findOne({pid: request.body.pid, version:request.body.version}, function(err, procedure)
+			artifactModel.findOneAndUpdate({pid: request.body.pid, version:request.body.version}, {active:true, date_of_modification: curDate},  function(err, procedure)
 			{
-
 				if(err)
 					response.status(500).send()
 				else
@@ -432,15 +433,14 @@ var revertProcedure = function(request, response){
 						}
 					})
 				}	
-			})						
+			})			
 		}
 	})
 }
 
 var getAllTrashProcedures = function(response){
 	
-	indexModel.find({trashed:true}, function(err, procedure){
-	
+	artifactModel.find({trashed:true, active:true}, 'pid pname version date_of_modification', function(err, procedure){	
 		if(!err)
 			response.send(procedure)
 		else
@@ -450,20 +450,12 @@ var getAllTrashProcedures = function(response){
 
 var getTrashProcedure = function(request, response){
 
-	indexModel.findOne({pid: request.params.id, trashed:true}, 'active_version', function(err, result){
+	artifactModel.findOne({pid: request.params.id, trashed:true, active:true},  function(err, result){
 
 		if(err || !result)
 			response.status(500).send()
-		else{
-			
-			artifactModel.findOne({pid: request.params.id, version:result.active_version, in_draft:false}, function(err, procedure){
-				
-				if(!err)
-					response.send(procedure)
-				else
-					response.status(500).send({})
-			})
-		}
+		else
+			response.send(result)		
 	})
 }
 
@@ -478,6 +470,45 @@ var getActivityLog = function(request, response){
 	})	
 }
 
+var addImage = function(imgName, path, res){
+
+	var newImage = new imageModel()
+	newImage.name = imgName
+	newImage.path = path
+	newImage.date = new Date()
+	newImage.save(function (err) { 
+		if (err) 
+			res.send(501, 'image could not be saved'); 
+		else
+			res.send('ok');
+	})
+}
+
+var getAllImages = function(req, res)
+{
+	imageModel.find({}, function (err, images) { 
+		if (err) 
+			res.send(501, 'image could not be get'); 
+		else
+			res.send(images);
+	})
+}
+
+var getImage = function(req, res)
+{
+	console.log(req.params.id)
+	imageModel.findOne({name:req.params.id}, function (err, image) { 
+		if (err || !image) 
+			res.send(501, 'image could not be get')
+		else
+		{
+			console.log(image)
+			console.log('D:/QMSAccessiblity_2014/' + image.path)
+			res.sendfile('D:/QMSAccessiblity_2014/'+ image.path);
+	
+		}
+	})
+}
 
 var search = function(request, response){
 
@@ -499,7 +530,7 @@ var search = function(request, response){
 		  }
 		}, function (error, result) {
 			var obj = []
-			if(error)
+			if(error || !result || !result.hits || !result.hits.hits)
 				response.status(500).send()
 
 			for(i=0; i<result.hits.hits.length; ++i)
@@ -531,8 +562,7 @@ var resolveLinks = function(request, response)
 			var obj = []
 			if(error)
 				response.status(500).send()
-
-			console.log("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
+			
 			for(i=0; i<result.hits.hits.length; ++i)
 			{
 				obj.push({id:result.hits.hits[i]._id, name:result.hits.hits[i]._source.name,  snippets: result.hits.hits[i].highlight.content})
@@ -566,9 +596,9 @@ exports.getNonActiveVersion = getNonActiveVersion
 exports.getActivityLog = getActivityLog
 exports.search = search
 exports.resolveLinks = resolveLinks
-
-
-
+exports.addImage = addImage
+exports.getAllImages = getAllImages;
+exports.getImage = getImage
 
 
 

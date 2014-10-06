@@ -31,7 +31,8 @@
 	"jsonwebtoken":"*",
 	"ldapjs":"*",	
 	"elasticsearch":"*",
-	"string":"*"
+	"string":"*",
+	"keyword-extractor":"*"
   }  
 }
 
