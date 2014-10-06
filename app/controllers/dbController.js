@@ -531,8 +531,11 @@ var search = function(request, response){
 		}, function (error, result) {
 			var obj = []
 			if(error || !result || !result.hits || !result.hits.hits)
+			{				
 				response.status(500).send()
-
+				return
+			}
+			
 			for(i=0; i<result.hits.hits.length; ++i)
 			{
 				obj.push({id:result.hits.hits[i]._id, name:result.hits.hits[i]._source.name,  snippets: result.hits.hits[i].highlight.content})
@@ -560,8 +563,11 @@ var resolveLinks = function(request, response)
 		  }
 		}, function (error, result) {
 			var obj = []
-			if(error)
+			if(error || !result || !result.hits || !result.hits.hits)
+			{				
 				response.status(500).send()
+				return
+			}
 			
 			for(i=0; i<result.hits.hits.length; ++i)
 			{
