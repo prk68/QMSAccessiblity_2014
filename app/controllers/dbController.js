@@ -208,7 +208,7 @@ var approveDraft = function(request, response)
 				response.status(500).send()
 			else
 			{
-				var notifType = (procedure.draft_type == "new") ? "Created" : "Edited"
+				var notifType = (procedure.draft_type == "new") ? "Published" : "Edited"
 					
 				var newNotification = new notificationModel({
 											pid: procedure.pid,
@@ -470,13 +470,9 @@ var getActivityLog = function(request, response){
 	})	
 }
 
-var addImage = function(imgName, path, res){
+var addImage = function(imgName, imgPath, res){
 
-	var newImage = new imageModel()
-	newImage.name = imgName
-	newImage.path = path
-	newImage.date = new Date()
-	newImage.save(function (err) { 
+	imageModel.update({name:imgName}, {path:imgPath, date: new Date()}, { upsert: true }, function (err) { 
 		if (err) 
 			res.send(501, 'image could not be saved'); 
 		else
@@ -514,8 +510,6 @@ var search = function(request, response){
 
 	client.search({
 		  index: 'procedurecontent',
-		  active: true,
-		  trashed: false,
 		  body: {
 		    query: {
 		      match: {
@@ -535,7 +529,7 @@ var search = function(request, response){
 				response.status(500).send()
 				return
 			}
-			
+
 			for(i=0; i<result.hits.hits.length; ++i)
 			{
 				obj.push({id:result.hits.hits[i]._id, name:result.hits.hits[i]._source.name,  snippets: result.hits.hits[i].highlight.content})
@@ -563,6 +557,7 @@ var resolveLinks = function(request, response)
 		  }
 		}, function (error, result) {
 			var obj = []
+			console.log(err)
 			if(error || !result || !result.hits || !result.hits.hits)
 			{				
 				response.status(500).send()

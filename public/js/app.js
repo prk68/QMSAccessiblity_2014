@@ -1,4 +1,5 @@
-var mod = angular.module('qmsAccessibility', ['ngRoute', 'appRoutes', 'ui.bootstrap', 'procedureListCtrlModule', 'procedureReaderCtrlModule', 'ngSanitize', 'activityLogModule','searchCtrlModule', 'ngResource', 'dBProcedureServiceModule']);
+var mod = angular.module('qmsAccessibility', ['ngRoute', 'appRoutes', 'ui.bootstrap', 'procedureListCtrlModule', 'procedureReaderCtrlModule', 'ngSanitize', 
+											'popupfilterModule', 'activityLogModule','searchCtrlModule', 'ngResource', 'dBProcedureServiceModule']);
 
 /*
 This directive allows us to pass a function in on an enter key to do what we want.
@@ -18,7 +19,7 @@ mod.directive('ngEnter', function () {
 });
 
 
-mod.controller('indexController', function($scope, $location){
+mod.controller('indexController', function($scope, $location, $modal){
 
 	$scope.searchQuery = ""
 
@@ -27,6 +28,22 @@ mod.controller('indexController', function($scope, $location){
 								console.log("test2")
 								$location.path('/searchQMS').search({q:$scope.searchQuery})															
 							}
+						}
+
+	$scope.popupFilter = function(filter){
+							console.log(filter)
+							var modalInstance = $modal.open({
+							      templateUrl: '../views/popupfilter.html',
+							      controller: 'popupfilterController',
+							      resolve: {
+							        multiProcLoader: function(multiProcedureLoader) {
+										return multiProcedureLoader();
+									},
+									query: function() {
+										return filter;
+									}
+							      }
+							    });
 						}
 })
 

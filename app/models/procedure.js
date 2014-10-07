@@ -26,7 +26,7 @@ var artifactSchema = new mongoose.Schema({
 	active: Boolean,
 	date_of_modification: Date,
 	mappings : {
-					role: 		{pfl: Boolean, eng: Boolean, cmz: Boolean, ops: Boolean, ops: Boolean, qlty: Boolean},
+					role: 		{pfl: Boolean, eng: Boolean, cmz: Boolean, ops: Boolean, sup: Boolean, qlty: Boolean},
 					phase:		{incp: Boolean, elb: Boolean, constr: Boolean, beta: Boolean, cmz: Boolean},		
 					center:     {abtc:Boolean, atc:Boolean, brgc:Boolean, htc:Boolean, mptc:Boolean, sntc:Boolean, ptc:Boolean},	
 					global: 	Boolean,		
@@ -40,7 +40,8 @@ var artifactSchema = new mongoose.Schema({
 	in_draft: Boolean,
 	draft_type: String, 
 	rejected: Boolean, 
-	rejections: [String]
+	rejections: [String],
+	path: String,
 })
 
 var artifactModel = mongoose.model('artifact', artifactSchema)

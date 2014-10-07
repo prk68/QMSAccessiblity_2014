@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h3 class="modal-title">Results!</h3>
+</div>
+
+<div class="modal-body">
+    <table  class="table table-striped">
+    <thead>
+        <tr>
+            <th> Procedure ID </th>
+            <th> Procedure Name </th>
+            <th> Version </th>
+            <th> Modified Date </th>
+        </tr>
+    </thead>
+
+    <tr ng-repeat="result in results">
+        <td> {{result.pid }}</td>
+        <td> <a href="/reader/{{result.pid}}"> {{result.pname}} </a></td>
+        <td> {{result.version}} </td>
+        <td> {{result.date_of_modification | date:'shortDate' }}</td>
+    </tr>
+</table>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+</div>

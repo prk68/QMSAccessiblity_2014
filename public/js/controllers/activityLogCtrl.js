@@ -24,7 +24,7 @@ activityLogModule.controller('activityLogController', function($scope, activityL
 			$scope.owners.push(activityLogLoader[i].author)
 	}
 
-	$scope.types= ["Created", "Edited", "Removed", "Reverted", "Restored"]
+	$scope.types= ["Published", "Edited", "Removed", "Reverted", "Restored"]
 	console.log($scope.results)
 
 

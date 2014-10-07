@@ -31,7 +31,7 @@ mod.controller('imagesController', function($scope, fileUpload, imageLoader, $ro
 
 
 	$scope.replace = function(){
-		fileUpload.uploadFileToUrl($scope.myFile, '/images/upload').success(
+		fileUpload.uploadFileToUrl($scope.imgName, $scope.myFile, '/images/upload').success(
 			function(){
 	        	$route.reload()
 	        }).error(
@@ -53,7 +53,7 @@ mod.controller('imagesController', function($scope, fileUpload, imageLoader, $ro
 	$scope.search =function(){
 
 		for(i=0; i<$scope.results.length; ++i)
-			if($scope.query && $scope.results[i].name == $scope.query)
+			if($scope.query && $scope.results[i].name.indexOf($scope.query) != -1)
 				$scope.results[i].show = true
 			else
 				$scope.results[i].show = false

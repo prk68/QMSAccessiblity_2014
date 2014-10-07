@@ -24,6 +24,17 @@
 	</div>
 </form>
  
+<ul class="nav nav-tabs" role="tablist">
+  <li ng-class="{ active: isActive('all')}">   <a ng-click="step_all()">    <b>All</b>			       </a></li>
+  <li ng-class="{ active: isActive('pfl')}">  	<a ng-click="step_pfl()">   <b>Portfolio</b>  		   </a></li>
+  <li ng-class="{ active: isActive('eng')}"> 	<a ng-click="step_eng()">   <b>Engineering</b>          </a></li>
+  <li ng-class="{ active: isActive('cmz')}">    <a ng-click="step_cmz()"> 	<b>Commercialization</b>     </a></li>
+  <li ng-class="{ active: isActive('ops')}">    <a ng-click="step_ops()"> 	<b>Operations</b>		   </a></li>
+  <li ng-class="{ active: isActive('sup')}">    <a ng-click="step_sup()">  	<b>Support</b>			   </a></li>
+  <li ng-class="{ active: isActive('qlty')}">  <a ng-click="step_qlty()">   <b>Quality</b>			   </a></li> 
+</ul>
+
+<br> 
 
 <table  class="table table-striped">
 	<thead>
